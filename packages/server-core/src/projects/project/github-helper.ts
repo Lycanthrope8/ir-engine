@@ -711,13 +711,19 @@ const createNewTree = async (
       })
     }
   })
-  const { data } = await octo.git.createTree({
-    owner,
-    repo,
-    tree,
-    base_tree: parentTreeSha
-  })
-  return data
+  try {
+    console.log('tree', tree)
+    const {data} = await octo.git.createTree({
+      owner,
+      repo,
+      tree,
+      base_tree: parentTreeSha
+    })
+    return data
+  } catch(err) {
+    console.log('error creating git tree', err)
+    throw err
+  }
 }
 
 const createNewCommit = async (
