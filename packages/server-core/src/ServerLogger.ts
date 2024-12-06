@@ -178,7 +178,13 @@ export const logger = pino(
           }
         }
 
-        return method.apply(this, inputArgs)
+        try {
+          console.log('running server logger', method, inputArgs)
+          return method.apply(this, inputArgs)
+        } catch(err) {
+          console.log('Error with logging', err)
+          return Promise.resolve()
+        }
       }
     }
   },
