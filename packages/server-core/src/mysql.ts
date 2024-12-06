@@ -64,7 +64,7 @@ export default (app: Application): void => {
   try {
     const { forceRefresh } = appConfig.db
 
-    logger.info('Starting app.')
+    // logger.info('Starting app.')
     const oldSetup = app.setup
 
     const db = knex({
