@@ -63,8 +63,12 @@ cli.main(async () => {
     const buildErrors = fs.readFileSync(`${options.service}-build-error.txt`).toString()
     const builderRun = fs.readFileSync('builder-run.txt').toString()
     if (options.isDocker) {
+      console.log('isDocker is true')
       const cacheMissRegex = new RegExp(`${options.service}:latest_${process.env.RELEASE_NAME}_cache: not found`)
+      console.log('exit code 1', /exit code: 1/.test(buildErrors))
+      console.log('Non cache miss ERROR', /ERROR:/.test(buildErrors) && !cacheMissRegex.test(buildErrors))
       if (/exit code: 1/.test(buildErrors) || (/ERROR:/.test(buildErrors) && !cacheMissRegex.test(buildErrors))) {
+        console.log('Recording error')
         const combinedLogs = `Docker task that errored: ${options.service}\n\nTask logs:\n\n${buildErrors}`
         await knexClient
           .from<BuildStatusType>(buildStatusPath)

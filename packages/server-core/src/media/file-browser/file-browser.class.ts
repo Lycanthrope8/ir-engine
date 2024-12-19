@@ -431,6 +431,7 @@ export class FileBrowserService
   ) {
     const items = await storageProvider.listFolderContent(oldPath + '/')
 
+    console.log('items', items)
     for (const item of items) {
       const oldItemPath = path.join(oldPath, item.name)
       const newItemPath = path.join(newPath, item.name)
