@@ -100,6 +100,7 @@ export const updateAppConfig = async (): Promise<void> => {
             .digest('hex')
         }
         appConfig.authentication.jwtOptions.algorithm = dbAuthentication.jwtAlgorithm || 'HS256'
+          console.log('Final auth config', appConfig.authentication)
       }
     })
     .catch((e) => {
