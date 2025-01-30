@@ -1207,6 +1207,7 @@ export const removeProjectUpdateJob = async (app: Application, projectName: stri
       const cronjobs = await k8BatchClient.listNamespacedCronJob(
           'default'
       )
+      console.log('cronjobs', cronjobs, cronjobs.body, cronjobs.body?.items)
       if (cronjobs.body.items.find(cronjob => {
         console.log('cronjob name', cronjob.name)
         console.log('name we are looking for', getValidPodName(`${process.env.RELEASE_NAME}-auto-update-${projectName}`))
