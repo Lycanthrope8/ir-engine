@@ -137,6 +137,7 @@ export class ArchiverService implements ServiceInterface<string, ArchiverParams>
         name: jobBody.metadata!.name
       })
       const jobLabelSelector = `ir-engine/projectField=${projectJobName},ir-engine/release=${process.env.RELEASE_NAME},ir-engine/directoryArchiver=true`
+      console.log('archiver creating job', jobBody.metadata!.name)
       const jobFinishedPromise = createExecutorJob(
         this.app,
         jobBody,

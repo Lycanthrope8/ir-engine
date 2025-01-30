@@ -566,6 +566,7 @@ const updateProjectJob = async (context: HookContext) => {
       name: jobBody.metadata!.name
     })
     const jobLabelSelector = `ir-engine/projectField=${projectJobName},ir-engine/release=${process.env.RELEASE_NAME},ir-engine/autoUpdate=false`
+    console.log('update project job creating job', jobBody.metadata!.name)
     const jobFinishedPromise = createExecutorJob(context.app, jobBody, jobLabelSelector, 1000, newJob.id)
     try {
       await jobFinishedPromise

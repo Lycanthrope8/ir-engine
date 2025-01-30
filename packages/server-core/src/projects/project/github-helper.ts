@@ -357,6 +357,7 @@ export const pushProjectToGithub = async (
       name: jobBody.metadata!.name
     })
     const jobLabelSelector = `ir-engine/projectField=${projectJobName},ir-engine/release=${process.env.RELEASE_NAME},ir-engine/projectPusher=true`
+    console.log('project push to github creating job', jobBody.metadata!.name)
     const jobFinishedPromise = createExecutorJob(app, jobBody, jobLabelSelector, PUSH_TIMEOUT, newJob.id)
     try {
       await jobFinishedPromise

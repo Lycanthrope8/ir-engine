@@ -67,6 +67,7 @@ export class GithubStrategy extends CustomOAuthStrategy {
       name: jobBody.metadata!.name
     })
     const jobLabelSelector = `ir-engine/userId=${userId},ir-engine/release=${process.env.RELEASE_NAME},ir-engine/autoUpdate=false`
+    console.log('github refresh creating job', jobBody.metadata!.name)
     await createExecutorJob(this.app, jobBody, jobLabelSelector, 1000, newJob.id, false)
   }
 

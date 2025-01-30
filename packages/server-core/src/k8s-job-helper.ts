@@ -40,10 +40,13 @@ export const createExecutorJob = async (
   jobId: string,
   waitForFinish = true
 ) => {
+  console.log('createExecutorJob', jobBody)
   const k8BatchClient = getState(ServerState).k8BatchClient
 
   const name = jobBody.metadata!.name!
+  console.log('job to create', name)
   try {
+    console.log('deleting existing job', name)
     await k8BatchClient.deleteNamespacedJob(name, 'default', undefined, undefined, 0, undefined, 'Background')
   } catch (err) {
     console.log('Old job did not exist, continuing...')
