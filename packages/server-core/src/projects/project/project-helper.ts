@@ -1325,6 +1325,7 @@ export const updateProject = async (
   },
   params?: ProjectParams
 ) => {
+  console.log('updateProject')
   if (data.sourceURL === 'ir-engine/default-project') {
     copyDefaultProject()
     await uploadLocalProjectToProvider(app, 'ir-engine/default-project')
@@ -1350,6 +1351,7 @@ export const updateProject = async (
   let projectName = data.name || urlParts.pop()
   if (!projectName) throw new Error('Git repo must be plain URL')
   projectName = projectName.toLowerCase()
+  console.log('projectName', projectName)
   if (projectName.substring(projectName.length - 4) === '.git') projectName = projectName.slice(0, -4)
   if (projectName.substring(projectName.length - 1) === '/') projectName = projectName.slice(0, -1)
 
@@ -1372,6 +1374,7 @@ export const updateProject = async (
   let project, userId
   if (projectResult.data.length > 0) project = projectResult.data[0]
 
+  console.log('project', project)
   let repoPath,
     signingToken,
     usesInstallationToken = false
@@ -1402,6 +1405,7 @@ export const updateProject = async (
     repoPath = authenticatedRepo
     signingToken = token
     params.provider = 'server'
+    console.log('authenticated against app JWT')
   } else {
     userId = params!.user?.id || project?.updateUserId
     if (!userId) throw new BadRequest('No user ID from call or existing project owner')
@@ -1451,6 +1455,7 @@ export const updateProject = async (
     logger.error(err)
     throw err
   }
+  console.log('checked out branch locally')
 
   const { assetsOnly } = await uploadLocalProjectToProvider(app, projectName)
 
@@ -1468,6 +1473,7 @@ export const updateProject = async (
     }
   })) as Paginated<ProjectType>
   const existingProject = existingProjectResult.total > 0 ? existingProjectResult.data[0] : null
+  console.log('existingProject', existingProject)
   let repositoryPath = data.destinationURL || data.sourceURL
   const publicSignedExec = PUBLIC_SIGNED_REGEX.exec(repositoryPath)
   const installationSignedExec = INSTALLATION_SIGNED_REGEX.exec(repositoryPath)
@@ -1478,9 +1484,11 @@ export const updateProject = async (
   if (publicSignedExec) repositoryPath = `https://github.com/${publicSignedExec[1]}/${publicSignedExec[2]}`
 
   const { commitSHA, commitDate } = await getCommitSHADate(projectName)
+  console.log('got commit date')
 
   let returned: ProjectType
   if (!existingProject) {
+    console.log('project does not exist')
     const createData = {
       name: projectName,
       enabled,
@@ -1498,6 +1506,7 @@ export const updateProject = async (
     if (userId) createData.updateUserId = userId
     returned = await app.service(projectPath).create(createData, params || {})
   } else {
+    console.log('project does exist')
     const patchData = {
       enabled,
       commitSHA,
@@ -1514,12 +1523,14 @@ export const updateProject = async (
   }
   returned.needsRebuild = typeof data.needsRebuild === 'boolean' ? data.needsRebuild : true
 
+  console.log('returned', returned)
   if (returned.name !== projectName)
     await app.service(projectPath).patch(returned.id, {
       name: projectName
     })
 
   if (data.reset) {
+    console.log('resetting project')
     let { authenticatedRepo } = await getAuthenticatedRepo(
       signingToken,
       data.destinationURL,
@@ -1530,6 +1541,7 @@ export const updateProject = async (
     await git.addRemote('destination', authenticatedRepo)
     await git.raw(['lfs', 'fetch', '--all'])
     await git.push('destination', branchName, ['-f', '--tags'])
+    console.log('pushed to deployment branch')
     const { commitSHA, commitDate } = await getCommitSHADate(projectName)
     await app.service(projectPath).patch(
       returned.id,
@@ -1542,25 +1554,33 @@ export const updateProject = async (
   }
   // run project install script
   await execPromise(`npm install`, { cwd: appRootPath.path })
+  console.log('ran npm install with project')
   if (projectConfig?.onEvent) {
+    console.log('calling onProjectEvent')
     await onProjectEvent(app, returned, projectConfig.onEvent, existingProject ? 'onUpdate' : 'onInstall')
+    console.log('finished calling onProjectEvent')
   }
 
   const k8BatchClient = getState(ServerState).k8BatchClient
 
+  console.log('dealing with auto-update job')
   if (k8BatchClient && (data.updateType === 'tag' || data.updateType === 'commit'))
     await createOrUpdateProjectUpdateJob(app, projectName)
   else if (k8BatchClient && (data.updateType === 'none' || data.updateType == null))
     await removeProjectUpdateJob(app, projectName)
 
+  console.log('finished dealing with auto-update job')
   if (params?.jobId) {
+    console.log('patching job in DB')
     const date = await getDateTimeSql()
     await app.service(apiJobPath).patch(params.jobId as string, {
       status: 'succeeded',
       endTime: date
     })
+    console.log('finished patching job in DB')
   }
 
+  console.log('Done with project update', returned)
   return returned
 }
 
