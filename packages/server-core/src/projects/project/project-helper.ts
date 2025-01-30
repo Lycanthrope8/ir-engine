@@ -1203,11 +1203,21 @@ export const createOrUpdateProjectUpdateJob = async (app: Application, projectNa
 export const removeProjectUpdateJob = async (app: Application, projectName: string): Promise<void> => {
   try {
     const k8BatchClient = getState(ServerState).k8BatchClient
-    if (k8BatchClient)
-      await k8BatchClient.deleteNamespacedCronJob(
-        getValidPodName(`${process.env.RELEASE_NAME}-auto-update-${projectName}`),
-        'default'
+    if (k8BatchClient) {
+      const cronjobs = await k8BatchClient.listNamespacedCronJob(
+          'default'
       )
+      if (cronjobs.body.items.find(cronjob => {
+        console.log('cronjob name', cronjob.name)
+        console.log('name we are looking for', getValidPodName(`${process.env.RELEASE_NAME}-auto-update-${projectName}`))
+        console.log('matching cronjob', cronjob.name === getValidPodName(`${process.env.RELEASE_NAME}-auto-update-${projectName}`))
+        return cronjob.name === getValidPodName(`${process.env.RELEASE_NAME}-auto-update-${projectName}`)
+      }))
+        await k8BatchClient.deleteNamespacedCronJob(
+            getValidPodName(`${process.env.RELEASE_NAME}-auto-update-${projectName}`),
+            'default'
+        )
+    }
   } catch (err) {
     logger.error('Failed to remove project update cronjob %o', err)
   }
