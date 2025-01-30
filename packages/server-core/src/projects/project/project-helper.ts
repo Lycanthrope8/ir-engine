@@ -1543,6 +1543,7 @@ export const updateProject = async (
     await git.push('destination', branchName, ['-f', '--tags'])
     console.log('pushed to deployment branch')
     const { commitSHA, commitDate } = await getCommitSHADate(projectName)
+    console.log('Got commit sha and date')
     await app.service(projectPath).patch(
       returned.id,
       {
@@ -1552,6 +1553,7 @@ export const updateProject = async (
       params
     )
   }
+  console.log('patched project with commit sha and date, running npm install')
   // run project install script
   await execPromise(`npm install`, { cwd: appRootPath.path })
   console.log('ran npm install with project')
