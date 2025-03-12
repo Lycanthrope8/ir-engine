@@ -25,7 +25,7 @@ Infinite Reality Engine. All Rights Reserved.
 
 import { GLTF } from '@gltf-transform/core'
 import assert from 'assert'
-import { Cache, Color, MeshPhysicalMaterial, MeshStandardMaterial } from 'three'
+import { Color, MeshPhysicalMaterial, MeshStandardMaterial } from 'three'
 import { afterEach, beforeEach, describe, it, vi } from 'vitest'
 
 import { UserID } from '@ir-engine/common/src/schema.type.module'
@@ -57,6 +57,7 @@ import { NodeID, NodeIDComponent, NodesBySourceState } from '@ir-engine/engine/s
 import { SourceComponent } from '@ir-engine/engine/src/scene/components/SourceComponent'
 import { SceneDeltaState } from '@ir-engine/engine/src/scene/systems/SceneDeltaState'
 import { startEngineReactor } from '@ir-engine/engine/tests/startEngineReactor'
+import { overrideFileLoader } from '@ir-engine/engine/tests/util/loadGLTFAssetNode'
 import { NameComponent } from '@ir-engine/spatial/src/common/NameComponent'
 import { Physics } from '@ir-engine/spatial/src/physics/classes/Physics'
 import { SceneComponent } from '@ir-engine/spatial/src/renderer/components/SceneComponents'
@@ -67,11 +68,12 @@ import { EditorControlFunctions } from './EditorControlFunctions'
 
 const waitForScene = (entity: Entity) => vi.waitUntil(() => GLTFComponent.isSceneLoaded(entity), { timeout: 5000 })
 
+const { override, restore } = overrideFileLoader()
+
 describe('EditorControlFunctions', () => {
   let physicsWorldEntity: Entity
 
   beforeEach(async () => {
-    Cache.enabled = true
     createEngine()
     getMutableState(EngineState).isEditing.set(true)
     getMutableState(EngineState).isEditor.set(true)
@@ -90,7 +92,7 @@ describe('EditorControlFunctions', () => {
   })
 
   afterEach(() => {
-    Cache.enabled = false
+    restore()
     return destroyEngine()
   })
 
@@ -114,7 +116,7 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
+      override({ '/test.gltf': gltf })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
 
@@ -162,7 +164,7 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
+      override({ '/test.gltf': gltf })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
 
@@ -328,7 +330,7 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
+      override({ '/test.gltf': gltf })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
       await waitForScene(rootEntity)
@@ -369,7 +371,7 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
+      override({ '/test.gltf': gltf })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
       await waitForScene(rootEntity)
@@ -435,7 +437,7 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
+      override({ '/test.gltf': gltf })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
       await waitForScene(rootEntity)
@@ -478,7 +480,7 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
+      override({ '/test.gltf': gltf })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
       await waitForScene(rootEntity)
@@ -524,7 +526,7 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
+      override({ '/test.gltf': gltf })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
       await waitForScene(rootEntity)
@@ -576,7 +578,7 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
+      override({ '/test.gltf': gltf })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
       await waitForScene(rootEntity)
@@ -637,7 +639,7 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
+      override({ '/test.gltf': gltf })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
       await waitForScene(rootEntity)
@@ -700,7 +702,7 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
+      override({ '/test.gltf': gltf })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
       await waitForScene(rootEntity)
@@ -751,7 +753,7 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
+      override({ '/test.gltf': gltf })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
       await waitForScene(rootEntity)
@@ -792,7 +794,7 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
+      override({ '/test.gltf': gltf })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
       await waitForScene(rootEntity)
@@ -837,7 +839,7 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
+      override({ '/test.gltf': gltf })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
       await waitForScene(rootEntity)
@@ -889,7 +891,7 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
+      override({ '/test.gltf': gltf })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
       await waitForScene(rootEntity)
@@ -950,7 +952,7 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
+      override({ '/test.gltf': gltf })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
       await waitForScene(rootEntity)
@@ -1014,8 +1016,10 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
-      Cache.add('/sub-asset.gltf', subAssetGLTF)
+      override({
+        '/test.gltf': gltf,
+        '/sub-asset.gltf': subAssetGLTF
+      })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
       await waitForScene(rootEntity)
@@ -1087,7 +1091,7 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
+      override({ '/test.gltf': gltf })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
       await waitForScene(rootEntity)
@@ -1152,7 +1156,7 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
+      override({ '/test.gltf': gltf })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
       await waitForScene(rootEntity)
@@ -1209,7 +1213,7 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
+      override({ '/test.gltf': gltf })
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
       await waitForScene(rootEntity)

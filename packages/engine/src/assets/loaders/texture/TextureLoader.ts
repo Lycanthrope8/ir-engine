@@ -25,12 +25,16 @@ Infinite Reality Engine. All Rights Reserved.
 
 import { isClient } from '@ir-engine/hyperflux'
 import { iOS } from '@ir-engine/spatial/src/common/functions/isMobile'
-import { ImageBitmapLoader, LoadingManager, Texture } from 'three'
+import { LoadingManager, Texture } from 'three'
 import { Loader } from '../base/Loader'
+import { ImageBitmapLoader } from '../image/ImageBitmapLoader'
+
+// import resource state such that we have type override
+import '@ir-engine/spatial/src/resources/ResourceState'
+import { RefetchableTexture } from './RefetchableTexture'
 
 const noop = () => {}
 
-// Do we still need this check if we're now reliant on a browser that's new enough to have ArrayBuffer.resize?
 const iOSMaxResolution = 1024
 
 const getScaledBitmap = (img: ImageBitmap, maxResolution: number) => {
@@ -81,7 +85,8 @@ class TextureLoader extends Loader<Texture> {
       if (signal?.aborted) return
 
       const image = this.maxResolution ? getScaledBitmap(i, this.maxResolution) : i
-      const texture = new Texture(image)
+      const texture = new RefetchableTexture(image)
+      texture.loader = this
       texture.userData.url = url
       texture.needsUpdate = true
       onLoad(texture)
