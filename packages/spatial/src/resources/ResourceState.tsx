@@ -53,7 +53,6 @@ import { NO_PROXY, State, defineState, getMutableState, getState, none } from '@
 import React, { useEffect } from 'react'
 import { ReferenceSpaceState } from '../ReferenceSpaceState'
 import { Geometry } from '../common/constants/Geometry'
-import { isIPhone } from '../common/functions/isMobile'
 import iterateObject3D from '../common/functions/iterateObject3D'
 import { ColliderComponent } from '../physics/components/ColliderComponent'
 import { PerformanceState } from '../renderer/PerformanceState'
@@ -258,25 +257,18 @@ const resourceCallbacks = {
         const viewer = getState(ReferenceSpaceState).viewerEntity
         const renderer = getComponent(viewer, RendererComponent)
         const gl = renderer.renderContext as WebGL2RenderingContext
-        if (discardUponUpload && gl.fenceSync && isIPhone) {
-          const sync = gl.fenceSync(
-            gl.SYNC_GPU_COMMANDS_COMPLETE,
-            gl.getParameter(gl.MAX_CLIENT_WAIT_TIMEOUT_WEBGL) - 1
-          )
+        if (discardUponUpload && typeof gl.fenceSync === 'function') {
+          const sync = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0)
           if (sync) {
             const checkSync = () => {
               const status = gl.clientWaitSync(sync, 0, 0)
-              if (
-                status === gl.TIMEOUT_EXPIRED ||
-                status === gl.ALREADY_SIGNALED ||
-                status === gl.CONDITION_SATISFIED
-              ) {
+              if (status === gl.TIMEOUT_EXPIRED) {
+                requestAnimationFrame(checkSync)
+              } else {
                 gl.deleteSync(sync)
                 resource.metadata.merge({ onGPU: true, discarded: true })
                 asset.source.data = null
                 asset.mipmaps = []
-              } else {
-                requestAnimationFrame(checkSync)
               }
             }
             requestAnimationFrame(checkSync)
@@ -587,7 +579,6 @@ const addEntityResource = (
 
   returnedResources.push(resource)
 
-  /** @todo disposal currently causes errors */
   const entityHasAuthoringUpstream =
     getAuthoringCounterpart(entity) || getAncestorWithComponents(entity, [ColliderComponent]) // collider component is a hack to prevent unloading of physics objects
 
