@@ -25,10 +25,10 @@ Infinite Reality Engine. All Rights Reserved.
 
 import { getComponent, getOptionalMutableComponent, hasComponent } from '@ir-engine/ecs'
 import { getState, none, useMutableState } from '@ir-engine/hyperflux'
-import { ReferenceSpaceState } from '@ir-engine/spatial'
-import { destroySpatialViewer, initializeSpatialViewer } from '@ir-engine/spatial/src/initializeEngine'
-import { RendererComponent } from '@ir-engine/spatial/src/renderer/WebGLRendererSystem'
 import { useEffect } from 'react'
+import { destroySpatialViewer, initializeSpatialViewer } from '../../initializeEngine'
+import { ReferenceSpaceState } from '../../ReferenceSpaceState'
+import { RendererComponent } from '../WebGLRendererSystem'
 
 export const useEngineCanvas = (ref: React.RefObject<HTMLElement>) => {
   useEffect(() => {

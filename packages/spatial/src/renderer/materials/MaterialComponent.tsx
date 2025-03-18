@@ -37,12 +37,12 @@ import {
   useOptionalComponent
 } from '@ir-engine/ecs'
 import { Entity, EntityUUID } from '@ir-engine/ecs/src/Entity'
-import { PluginType } from '@ir-engine/spatial/src/common/functions/OnBeforeCompilePlugin'
 
 import { S } from '@ir-engine/ecs/src/schemas/JSONSchemas'
 import { defineState } from '@ir-engine/hyperflux'
 import React, { useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+import { PluginType } from '../../common/functions/OnBeforeCompilePlugin'
 import { MeshComponent } from '../components/MeshComponent'
 import { NoiseOffsetPluginComponent } from './constants/plugins/NoiseOffsetPlugin'
 import { TransparencyDitheringPluginComponent } from './constants/plugins/TransparencyDitheringComponent'

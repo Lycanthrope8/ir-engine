@@ -49,9 +49,7 @@ import {
   useEntityContext
 } from '@ir-engine/ecs'
 import { NO_PROXY, State, defineState, getMutableState, getState, none } from '@ir-engine/hyperflux'
-import { ObjectComponent } from '@ir-engine/spatial/src/renderer/components/ObjectComponent'
 
-import { ReferenceSpaceState } from '@ir-engine/spatial'
 import React, { useEffect } from 'react'
 import { Geometry } from '../common/constants/Geometry'
 import { isIPhone } from '../common/functions/isMobile'
@@ -59,6 +57,7 @@ import iterateObject3D from '../common/functions/iterateObject3D'
 import { ColliderComponent } from '../physics/components/ColliderComponent'
 import { PerformanceState } from '../renderer/PerformanceState'
 import { RendererComponent } from '../renderer/WebGLRendererSystem'
+import { ObjectComponent } from '../renderer/components/ObjectComponent'
 
 declare module 'three/src/textures/Texture.js' {
   export interface Texture {

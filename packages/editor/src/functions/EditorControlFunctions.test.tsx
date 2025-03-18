@@ -223,8 +223,8 @@ describe('EditorControlFunctions', () => {
         ]
       }
 
-      Cache.add('/test.gltf', gltf)
-      Cache.add('/sub-asset.gltf', subAssetGLTF)
+      override({ '/test.gltf': gltf, '/sub-asset.gltf': subAssetGLTF })
+
       const rootEntity = AssetState.load('/test.gltf', undefined, physicsWorldEntity, Layers.Authoring)
       getMutableState(EditorState).rootEntity.set(rootEntity)
       await waitForScene(rootEntity)

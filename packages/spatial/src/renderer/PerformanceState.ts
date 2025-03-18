@@ -40,10 +40,10 @@ import {
 } from '@ir-engine/ecs'
 import { profile } from '@ir-engine/ecs/src/Timer'
 import { defineState, getMutableState, getState, State, useMutableState } from '@ir-engine/hyperflux'
-import { RendererComponent, RenderSettingsState } from '@ir-engine/spatial/src/renderer/WebGLRendererSystem'
 
 import { EngineState } from '@ir-engine/ecs'
 import { RendererState } from './RendererState'
+import { RendererComponent, RenderSettingsState } from './WebGLRendererSystem'
 
 type PerformanceTier = 0 | 1 | 2 | 3 | 4 | 5
 type TargetFPS = 30 | 60
