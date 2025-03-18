@@ -51,6 +51,7 @@ import {
 import { NO_PROXY, State, defineState, getMutableState, getState, none } from '@ir-engine/hyperflux'
 
 import React, { useEffect } from 'react'
+import { ReferenceSpaceState } from '../ReferenceSpaceState'
 import { Geometry } from '../common/constants/Geometry'
 import { isIPhone } from '../common/functions/isMobile'
 import iterateObject3D from '../common/functions/iterateObject3D'
@@ -254,8 +255,6 @@ const resourceCallbacks = {
       resource.metadata.merge({ onGPU: false, discarded: false })
       asset.onUpdate = () => {
         resource.metadata.merge({ onGPU: true, discarded: discardUponUpload })
-        //@ts-ignore
-        // asset.onUpdate = null
         const viewer = getState(ReferenceSpaceState).viewerEntity
         const renderer = getComponent(viewer, RendererComponent)
         const gl = renderer.renderContext as WebGL2RenderingContext
