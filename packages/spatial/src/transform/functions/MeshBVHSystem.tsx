@@ -49,7 +49,13 @@ import {
   removeEntityNodeRecursively,
   useEntityContext
 } from '@ir-engine/ecs'
-import { getComponent, setComponent, useComponent, useOptionalComponent } from '@ir-engine/ecs/src/ComponentFunctions'
+import {
+  getComponent,
+  Layers,
+  setComponent,
+  useComponent,
+  useOptionalComponent
+} from '@ir-engine/ecs/src/ComponentFunctions'
 import { getMutableState, NO_PROXY, useHookstate } from '@ir-engine/hyperflux'
 import { NameComponent } from '../../common/NameComponent'
 import { MeshComponent } from '../../renderer/components/MeshComponent'
@@ -172,7 +178,7 @@ const MeshBVHReactor = () => {
   useEffect(() => {
     const abortController = new AbortController()
     if (ValidMeshForBVH(mesh)) {
-      generateMeshBVH(mesh!, abortController.signal, { indirect: true }).then(() => {
+      generateMeshBVH(mesh!, abortController.signal).then(() => {
         if (abortController.signal.aborted) return
         hasMeshBVH.set(true)
       })
@@ -217,7 +223,9 @@ const MeshBVHReactor = () => {
 export const MeshBVHSystem = defineSystem({
   uuid: 'ee.engine.MeshBVHSystem',
   insert: { after: PresentationSystemGroup },
-  reactor: () => <QueryReactor Components={[MeshComponent]} ChildEntityReactor={MeshBVHReactor} />
+  reactor: () => (
+    <QueryReactor Components={[MeshComponent]} ChildEntityReactor={MeshBVHReactor} layer={Layers.Simulation} />
+  )
 })
 
 /**
