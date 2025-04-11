@@ -36,12 +36,14 @@ import {
   Entity,
   getComponent,
   PresentationSystemGroup,
-  UndefinedEntity
+  UndefinedEntity,
+  useOptionalComponent
 } from '@ir-engine/ecs'
 import { profile } from '@ir-engine/ecs/src/Timer'
 import { defineState, getMutableState, getState, State, useMutableState } from '@ir-engine/hyperflux'
 
 import { EngineState } from '@ir-engine/ecs'
+import { ReferenceSpaceState } from '../ReferenceSpaceState'
 import { RendererState } from './RendererState'
 import { RendererComponent, RenderSettingsState } from './WebGLRendererSystem'
 
@@ -173,6 +175,14 @@ export const PerformanceState = defineState({
   }),
 
   reactor: () => {
+    const viewerEntity = useMutableState(ReferenceSpaceState).viewerEntity.value
+    const renderer = useOptionalComponent(viewerEntity, RendererComponent)
+
+    useEffect(() => {
+      if (!renderer?.renderer.value) return
+      // PerformanceManager.buildPerformanceState(getComponent(viewerEntity, RendererComponent))
+    }, [!!renderer?.renderer.value])
+
     const performanceState = useMutableState(PerformanceState)
     const renderSettings = useMutableState(RenderSettingsState)
     const engineSettings = useMutableState(RendererState)
@@ -190,8 +200,10 @@ export const PerformanceState = defineState({
     }
 
     useEffect(() => {
-      performanceState.enabled.set(!engineState.isEditing.value && engineSettings.automatic.value)
-    }, [engineState.isEditing, engineSettings.automatic])
+      performanceState.enabled.set(
+        !engineState.isEditing.value && engineSettings.automatic.value && performanceState.initialized.value
+      )
+    }, [engineState.isEditing, engineSettings.automatic, performanceState.initialized])
 
     useEffect(() => {
       recreateEMA()
@@ -204,12 +216,15 @@ export const PerformanceState = defineState({
       const settings = tieredSettings[performanceTier]
       engineSettings.merge(settings.engine)
       renderSettings.merge(settings.render)
+      if (performanceTier !== engineSettings.qualityLevel.value) engineSettings.qualityLevel.set(performanceTier)
     }, [performanceState.gpuTier, performanceState.initialized])
 
     useEffect(() => {
       recreateEMA()
       performanceState.performanceSmoothingAccum.set(0)
     }, [performanceState.gpuPerformanceOffset, performanceState.cpuPerformanceOffset])
+
+    return null
   }
 })
 
@@ -221,18 +236,16 @@ export const PerformanceSystem = defineSystem({
     const performanceState = getState(PerformanceState)
     if (!performanceState.enabled) return
 
-    {
-      const { performanceSmoothingAccum, performanceSmoothingCycles } = performanceState
-      const performanceStateMut = getMutableState(PerformanceState)
-      const ecsState = getState(ECSState)
+    const { performanceSmoothingAccum, performanceSmoothingCycles } = performanceState
+    const performanceStateMut = getMutableState(PerformanceState)
+    const ecsState = getState(ECSState)
 
-      updateExponentialMovingAverage(performanceStateMut.averageSystemTime, ecsState.lastSystemExecutionDuration)
-      updateExponentialMovingAverage(performanceStateMut.averageFrameTime, ecsState.deltaSeconds * 1000)
+    updateExponentialMovingAverage(performanceStateMut.averageSystemTime, ecsState.lastSystemExecutionDuration)
+    updateExponentialMovingAverage(performanceStateMut.averageFrameTime, ecsState.deltaSeconds * 1000)
 
-      if (performanceSmoothingAccum < performanceSmoothingCycles) {
-        performanceStateMut.performanceSmoothingAccum.set(performanceSmoothingAccum + 1)
-        return
-      }
+    if (performanceSmoothingAccum < performanceSmoothingCycles) {
+      performanceStateMut.performanceSmoothingAccum.set(performanceSmoothingAccum + 1)
+      return
     }
 
     const { averageFrameTime, averageRenderTime, averageSystemTime, targetFPS } = performanceState
@@ -432,6 +445,9 @@ const buildPerformanceState = async (rendererEntity: Entity, override?: GetGPUTi
   const performanceState = getMutableState(PerformanceState)
   const renderer = getComponent(rendererEntity, RendererComponent)
   const gl = renderer.renderContext as WebGL2RenderingContext
+
+  // hack fix for nodejs
+  if (!renderer.canvas || !renderer.canvas!.getContext('webgl2')) return
 
   const gpuTier = await getGPUTier({
     glContext: gl,

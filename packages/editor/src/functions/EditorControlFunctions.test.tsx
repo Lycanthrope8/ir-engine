@@ -47,6 +47,7 @@ import { Entity, UndefinedEntity } from '@ir-engine/ecs/src/Entity'
 import { AssetState } from '@ir-engine/engine/src/gltf/GLTFState'
 import { SplineComponent } from '@ir-engine/engine/src/scene/components/SplineComponent'
 import { getMutableState, getState } from '@ir-engine/hyperflux'
+import { flushAll } from '@ir-engine/hyperflux/tests/utils/flushAll'
 import { HemisphereLightComponent, TransformComponent } from '@ir-engine/spatial'
 import { VisibleComponent } from '@ir-engine/spatial/src/renderer/components/VisibleComponent'
 
@@ -76,7 +77,6 @@ describe('EditorControlFunctions', () => {
   beforeEach(async () => {
     createEngine()
     getMutableState(EngineState).isEditing.set(true)
-    getMutableState(EngineState).isEditor.set(true)
     getMutableState(EngineState).userID.set('user' as UserID)
     mockSpatialEngine()
     await Physics.load()
@@ -130,9 +130,13 @@ describe('EditorControlFunctions', () => {
 
       EditorControlFunctions.addOrRemoveComponent([authoringNodeEntity], VisibleComponent, true)
 
+      await flushAll()
+
       assert(hasComponent(authoringNodeEntity, VisibleComponent))
 
       EditorControlFunctions.addOrRemoveComponent([authoringNodeEntity], VisibleComponent, false)
+
+      await flushAll()
 
       assert(!hasComponent(authoringNodeEntity, VisibleComponent))
     })
@@ -177,9 +181,13 @@ describe('EditorControlFunctions', () => {
 
       EditorControlFunctions.addOrRemoveComponent([authoringChildEntity], VisibleComponent, true)
 
+      await flushAll()
+
       assert(hasComponent(authoringChildEntity, VisibleComponent))
 
       EditorControlFunctions.addOrRemoveComponent([authoringChildEntity], VisibleComponent, false)
+
+      await flushAll()
 
       assert(!hasComponent(authoringChildEntity, VisibleComponent))
     })
@@ -246,6 +254,8 @@ describe('EditorControlFunctions', () => {
 
       const testValue = Math.random()
       EditorControlFunctions.addOrRemoveComponent([authoringNode2Entity], testComponent, true, { value: testValue })
+
+      await flushAll()
 
       const deltaState = getState(SceneDeltaState)
       assert.equal(deltaState[node1ID][node2ID][testComponent.jsonID].value, testValue)
@@ -342,6 +352,8 @@ describe('EditorControlFunctions', () => {
 
       EditorControlFunctions.modifyName([authoringChildEntity], 'newName')
 
+      await flushAll()
+
       assert.equal(getComponent(authoringChildEntity, NameComponent), 'newName')
     })
   })
@@ -384,6 +396,8 @@ describe('EditorControlFunctions', () => {
         groundColor: new Color('red'),
         intensity: 0.7
       })
+
+      await flushAll()
 
       const hemisphereLightComponent = getComponent(authoringNodeEntity, HemisphereLightComponent)
       assert.deepEqual(hemisphereLightComponent.skyColor, new Color('blue'))
@@ -453,6 +467,8 @@ describe('EditorControlFunctions', () => {
         }
       })
 
+      await flushAll()
+
       const splineComponent = getComponent(authoringNodeEntity, SplineComponent)
       assert.equal(splineComponent.elements[1].position.x, 10)
       assert.equal(splineComponent.elements[1].position.y, 10)
@@ -495,6 +511,8 @@ describe('EditorControlFunctions', () => {
           }
         }
       ])
+
+      await flushAll()
 
       const newEntity = UUIDComponent.getEntityByUUID(entityUUID, Layers.Authoring)
       assert(newEntity)
@@ -551,6 +569,9 @@ describe('EditorControlFunctions', () => {
         UndefinedEntity,
         requestedName
       )
+
+      await flushAll()
+
       const entity1 = UUIDComponent.getEntityByUUID(entity1UUID, Layers.Authoring)
       assert(entity1)
       assert.equal(getComponent(entity1, NameComponent), 'Test')
@@ -589,6 +610,9 @@ describe('EditorControlFunctions', () => {
         UndefinedEntity,
         requestedName
       )
+
+      await flushAll()
+
       const entity3 = UUIDComponent.getEntityByUUID(entity3UUID, Layers.Authoring)
       assert(entity3)
       assert.equal(getComponent(entity3, NameComponent), 'Test 2')
@@ -634,6 +658,8 @@ describe('EditorControlFunctions', () => {
         ],
         authoringNodeEntity
       )
+
+      await flushAll()
 
       const newEntity = UUIDComponent.getEntityByUUID(entityUUID, Layers.Authoring)
       assert(newEntity)
@@ -687,6 +713,8 @@ describe('EditorControlFunctions', () => {
         rootEntity,
         authoringNodeEntity
       )
+
+      await flushAll()
 
       const newEntity = UUIDComponent.getEntityByUUID(entityUUID, Layers.Authoring)
       assert(newEntity)
@@ -752,6 +780,8 @@ describe('EditorControlFunctions', () => {
         authoringChildEntity
       )
 
+      await flushAll()
+
       const newEntity = UUIDComponent.getEntityByUUID(entityUUID, Layers.Authoring)
       assert(newEntity)
       assert.equal(getComponent(newEntity, NameComponent), 'New Object')
@@ -798,6 +828,8 @@ describe('EditorControlFunctions', () => {
       const authoringNodeEntity = LayerFunctions.getAuthoringCounterpart(simulationNodeEntity)
 
       EditorControlFunctions.duplicateObject([authoringNodeEntity])
+
+      await flushAll()
 
       const newEntity = getComponent(rootEntity, EntityTreeComponent).children[1]
 
@@ -850,6 +882,8 @@ describe('EditorControlFunctions', () => {
 
       EditorControlFunctions.reparentObject([authoringChildEntity], null, null, rootEntity)
 
+      await flushAll()
+
       const newEntity = getComponent(rootEntity, EntityTreeComponent).children[1]
       assert(newEntity)
       assert.equal(getComponent(newEntity, NodeIDComponent), childID)
@@ -893,6 +927,8 @@ describe('EditorControlFunctions', () => {
       const authoringNode2Entity = LayerFunctions.getAuthoringCounterpart(simulationNode2Entity)
 
       EditorControlFunctions.reparentObject([authoringNode2Entity], null, null, authoringNodeEntity)
+
+      await flushAll()
 
       const newEntity = getComponent(authoringNodeEntity, EntityTreeComponent).children[0]
       assert.equal(newEntity, authoringNode2Entity)
@@ -938,6 +974,8 @@ describe('EditorControlFunctions', () => {
       const authoringChildEntity = LayerFunctions.getAuthoringCounterpart(simulationChildEntity)
 
       EditorControlFunctions.reparentObject([authoringChildEntity], authoringNodeEntity, null, rootEntity)
+
+      await flushAll()
 
       const newEntity = getComponent(rootEntity, EntityTreeComponent).children[0]
       assert.equal(newEntity, authoringChildEntity)
@@ -993,6 +1031,8 @@ describe('EditorControlFunctions', () => {
       const authoringChildEntity = LayerFunctions.getAuthoringCounterpart(simulationChildEntity)
 
       EditorControlFunctions.reparentObject([authoringNode2Entity], authoringChildEntity, null, authoringNodeEntity)
+
+      await flushAll()
 
       const newEntity = getComponent(authoringNodeEntity, EntityTreeComponent).children[0]
       assert.equal(newEntity, authoringNode2Entity)
@@ -1051,6 +1091,8 @@ describe('EditorControlFunctions', () => {
       const authoringNode4Entity = LayerFunctions.getAuthoringCounterpart(simulationNode4Entity)
 
       EditorControlFunctions.reparentObject([authoringNode4Entity], undefined, authoringNode2Entity, rootEntity)
+
+      await flushAll()
 
       const newEntity = getComponent(rootEntity, EntityTreeComponent).children[2]
       assert.equal(newEntity, authoringNode4Entity)
@@ -1112,7 +1154,6 @@ describe('EditorControlFunctions', () => {
       await waitForScene(rootEntity)
 
       const simulationNode1Entity = NodeFunctions.getEntityFromNodeID(rootEntity, node1ID)!
-      const authoringNode1Entity = LayerFunctions.getAuthoringCounterpart(simulationNode1Entity)
 
       const simulationNode2Entity = NodeFunctions.getEntityFromNodeID(rootEntity, node2ID)!
       const authoringNode2Entity = LayerFunctions.getAuthoringCounterpart(simulationNode2Entity)
@@ -1126,9 +1167,11 @@ describe('EditorControlFunctions', () => {
 
       EditorControlFunctions.reparentObject([authoringNode2Entity], null, null, authoringNode3Entity)
 
+      await flushAll()
+
       await vi.waitUntil(() => getState(NodesBySourceState)[subAssetSourceID][node3ID])
 
-      const reparentedSimulationNode2Entity = NodeFunctions.getEntityFromNodeID(authoringNode1Entity, node2ID)!
+      const reparentedSimulationNode2Entity = NodeFunctions.getEntityFromNodeID(authoringNode3Entity, node2ID)!
       const reparentedAuthoringNode2Entity = LayerFunctions.getAuthoringCounterpart(reparentedSimulationNode2Entity)
 
       assert.equal(reparentedAuthoringNode2Entity, authoringNode2Entity)
@@ -1190,6 +1233,8 @@ describe('EditorControlFunctions', () => {
       const authoringNode2Entity = LayerFunctions.getAuthoringCounterpart(simulationNode2Entity)
 
       EditorControlFunctions.groupObjects([authoringNodeEntity, authoringNode2Entity])
+
+      await flushAll()
 
       const newEntity = getComponent(rootEntity, EntityTreeComponent).children[0]
       assert.equal(getComponent(newEntity, EntityTreeComponent).children[0], authoringNodeEntity)
@@ -1259,6 +1304,8 @@ describe('EditorControlFunctions', () => {
 
       EditorControlFunctions.removeObject([authoringNodeEntity])
 
+      await flushAll()
+
       assert.equal(getComponent(rootEntity, EntityTreeComponent).children[0], authoringNode2Entity)
       assert.equal(getComponent(rootEntity, EntityTreeComponent).children[1], authoringNode3Entity)
 
@@ -1321,6 +1368,8 @@ describe('EditorControlFunctions', () => {
         ],
         rootEntity
       )
+
+      await flushAll()
 
       const childEntity = getComponent(authoringNodeEntity, EntityTreeComponent).children[0]
 

@@ -28,8 +28,8 @@ import { getMutableState, getState, none } from '@ir-engine/hyperflux'
 import { ResourceAssetType, ResourceState, ResourceType } from '@ir-engine/spatial/src/resources/ResourceState'
 
 import { AssetLoader } from '../classes/AssetLoader'
+import { Loader } from '../loaders/base/Loader'
 import { ResourceCacheState, ResourceStatus } from '../state/ResourceCacheState'
-
 interface Cloneable<T> {
   clone?: () => T
 }
@@ -63,7 +63,7 @@ export const loadResource = <T extends ResourceAssetType>(
   onProgress: (request: ProgressEvent) => void,
   onError: (event: ErrorEvent | Error) => void,
   signal: AbortSignal,
-  loader?: AssetLoader
+  loader?: Loader
 ) => {
   const resourceCacheState = getMutableState(ResourceCacheState)
   if (!resourceCacheState[url].value) {
