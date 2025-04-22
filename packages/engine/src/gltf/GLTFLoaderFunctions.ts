@@ -1422,6 +1422,8 @@ const loadSkin = async (options: GLTFParserOptions, nodeEntity: Entity, nodeInde
 
   const skeleton = new Skeleton(bones, boneInverses)
   skinnedMesh.skeleton = skeleton
+  // Make sure skeleton is propagated to simulation layer
+  setComponent(skinnedMesh.entity, SkinnedMeshComponent, skinnedMesh)
 }
 
 const loadNode = async (options: GLTFParserOptions, nodeIndex: number) => {
@@ -1508,7 +1510,6 @@ const loadNode = async (options: GLTFParserOptions, nodeIndex: number) => {
     const bone = new Bone()
     // bone.name = node.name ?? 'Node-' + i
     setComponent(nodeEntity, BoneComponent, bone)
-    removeComponent(nodeEntity, VisibleComponent) // remove visible so it isn't rendered
   } else {
     const obj3d = new Object3D()
     // obj3d.name = node.name ?? 'Node-' + i
@@ -1555,7 +1556,18 @@ const loadNode = async (options: GLTFParserOptions, nodeIndex: number) => {
 
   return nodeEntity
 }
+const loadMaterialGLTF = async (options: GLTFParserOptions) => {
+  if (Array.isArray(options.document)) {
+    options.document = options.document[0]
+  }
+  DependencyCache.set(options.url, new Map())
+  for (const mat of options.document.materials!) {
+    const materialIndex = options.document.materials!.indexOf(mat)
+    await loadMaterial(options, materialIndex)
+  }
 
+  getComponent(options.entity, GLTFComponent).body = null
+}
 const loadScene = async (options: GLTFParserOptions, sceneIndex: number) => {
   const json = options.document
   const rootEntity = options.entity
@@ -1664,7 +1676,8 @@ export const GLTFLoaderFunctions = {
   loadMesh,
   loadNode,
   loadScene,
-  unloadScene
+  unloadScene,
+  loadMaterialGLTF
 }
 
 export const DependencyCache = new Map<string, Map<string, Promise<any>>>()
@@ -1738,4 +1751,59 @@ export type GLTFParserOptions = {
   requestHeader: Record<string, string>
   // @todo
   // abortController: AbortController
+}
+
+const validateVersionFormat = (vers: string): boolean => /^[0-9]{1,10}.[0-9]{1,10}$/.test(vers)
+
+function validateVersionGreaterThan(vers1: string, vers2: string): boolean {
+  const [major1, minor1] = vers1.split('.').map(Number)
+  const [major2, minor2] = vers2.split('.').map(Number)
+  return major1 > major2 || (major1 === major2 && minor1 > minor2)
+}
+
+function validateAsset(asset: GLTF.IAsset) {
+  // glTF.asset.version
+  if (asset.version === undefined) throw new Error('glTF.asset.version MUST be defined.')
+  if (!GLTFValidate.versionFormat(asset.version))
+    throw new Error('glTF.asset.version MUST respect the format ^[0-9]+.[0-9]+$.')
+  if (asset.version !== '2.0') throw new Error('glTF.asset.version MUST be "2.0".')
+
+  // glTF.asset.copyright
+  if (asset.copyright !== undefined) {
+    // MAY be undefined
+    if (typeof asset.copyright !== 'string') throw new Error('glTF.asset.copyright MUST be a string.')
+  }
+
+  // glTF.asset.generator
+  if (asset.generator !== undefined) {
+    // MAY be undefined
+    if (typeof asset.generator !== 'string') throw new Error('glTF.asset.generator MUST be a string.')
+  }
+
+  // glTF.asset.minVersion
+  if (asset.minVersion !== undefined) {
+    // MAY be undefined
+    if (typeof asset.minVersion !== 'string') throw new Error('glTF.asset.minVersion MUST be a string.')
+    if (!GLTFValidate.versionFormat(asset.minVersion))
+      throw new Error('glTF.asset.minVersion MUST respect the format ^[0-9]+.[0-9]+$.')
+    if (GLTFValidate.versionGreaterThan(asset.minVersion, asset.version))
+      throw new Error('glTF.asset.minVersion MUST NOT be greater than Asset.version.')
+  }
+
+  // glTF.asset.extensions
+  if (asset.extensions !== undefined) {
+    // MAY be undefined
+    if (typeof asset.extensions !== 'object') throw new Error('glTF.asset.extensions MUST be a JSON object.')
+  }
+
+  // glTF.asset.extras
+  if (asset.extras !== undefined) {
+    /* ignored */
+  } // MAY be undefined
+}
+
+export const GLTFValidate = {
+  versionFormat: validateVersionFormat,
+  versionGreaterThan: validateVersionGreaterThan,
+  asset: validateAsset
 }
