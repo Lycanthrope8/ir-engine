@@ -59,6 +59,7 @@ import { onSaveScene, setCurrentEditorScene } from '../functions/sceneFunctions'
 import { AssetsPanelTab } from '../panels/assets'
 import { AssetsQueryProvider } from '../panels/assets/hooks'
 import { HierarchyPanelTab } from '../panels/hierarchy'
+import { InspectorPanelTab } from '../panels/inspector'
 import { MaterialsPanelTab } from '../panels/materials'
 import { PropertiesPanelTab } from '../panels/properties'
 import { ScenePanelTab } from '../panels/scenes'
@@ -133,7 +134,7 @@ const defaultLayout = (flags: { visualScriptPanelEnabled: boolean }): LayoutData
               tabs: [HierarchyPanelTab, ScenePanelTab, MaterialsPanelTab]
             },
             {
-              tabs: [PropertiesPanelTab]
+              tabs: [PropertiesPanelTab, InspectorPanelTab]
             }
           ]
         }
