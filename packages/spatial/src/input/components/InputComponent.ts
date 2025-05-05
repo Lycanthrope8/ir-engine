@@ -23,15 +23,21 @@ All portions of the code written by the Infinite Reality Engine team are Copyrig
 Infinite Reality Engine. All Rights Reserved.
 */
 
-import { defineSystem, EngineState, getComponent, InputSystemGroup, UndefinedEntity, useExecute } from '@ir-engine/ecs'
+import {
+  defineSystem,
+  EngineState,
+  getComponent,
+  InputSystemGroup,
+  UndefinedEntity,
+  useEntityContext,
+  useExecute
+} from '@ir-engine/ecs'
 import { defineComponent, getMutableComponent, getOptionalComponent } from '@ir-engine/ecs/src/ComponentFunctions'
-import { Entity } from '@ir-engine/ecs/src/Entity'
-import { useEntityContext } from '@ir-engine/ecs/src/EntityFunctions'
+import { Entity, EntityUUID } from '@ir-engine/ecs/src/Entity'
 import { getState, NO_PROXY_STEALTH, useHookstate } from '@ir-engine/hyperflux'
 
 import { getAncestorWithComponents, isAncestor } from '@ir-engine/ecs'
 import { S } from '@ir-engine/ecs/src/schemas/JSONSchemas'
-import { NameComponent } from '../../common/NameComponent'
 import {
   AnyAxis,
   AnyButton,
@@ -134,23 +140,23 @@ export const InputComponent = defineComponent({
   jsonID: 'EE_input',
 
   schema: S.Object({
-    inputSinks: S.Array(S.EntityUUID(), ['Self']),
-    activationDistance: S.Number(2),
-    highlight: S.Bool(false),
-    grow: S.Bool(false),
+    inputSinks: S.Array(S.EntityUUID(), { default: ['Self' as EntityUUID] }),
+    activationDistance: S.Number({ default: 2 }),
+    highlight: S.Bool({ default: false }),
+    grow: S.Bool({ default: false }),
     buttonBindings: S.Record(S.String(), S.Array(S.Union([ButtonSchema, S.Array(ButtonSchema)])), {
       ...DefaultButtonBindings
     }),
     //internal
     /** populated automatically by ClientInputSystem */
-    inputSources: S.NonSerialized(S.Array(S.Entity())),
-    cachedButtons: S.NonSerialized(S.Type<ButtonStateMap<any>>({})),
+    inputSources: S.Array(S.Entity(), { serialized: false }),
+    cachedButtons: S.Type<ButtonStateMap<any>>({ serialized: false, default: {} }),
 
     /** if true, the input component will automatically capture input when a button is consumed */
-    autoCapture: S.Bool(false),
+    autoCapture: S.Bool({ default: false }),
 
-    buttons: S.NonSerialized(
-      S.SerializedClass((entity) => {
+    buttons: S.SerializedClass(
+      (entity) => {
         // Helper function to find first unconsumed button state
         const findButtonState = (button: AnyButton): ButtonState | undefined => {
           const inputComponent = getComponent(entity, InputComponent)
@@ -158,12 +164,12 @@ export const InputComponent = defineComponent({
             const inputSourceComponent = getOptionalComponent(sourceEntity, InputSourceComponent)
             if (!inputSourceComponent) continue
             const state = inputSourceComponent.buttons[button] as ButtonState
-            if (state?.consumed)
-              console.warn(
-                `button ${button} checked by ${entity} - ${getComponent(entity, NameComponent)} consumed by ${
-                  state.consumed
-                } - ${getComponent(state.consumed, NameComponent)}`
-              )
+            // if (state?.consumed)
+            //   console.warn(
+            //     `button ${button} checked by ${entity} - ${getComponent(entity, NameComponent)} consumed by ${
+            //       state.consumed
+            //     } - ${getComponent(state.consumed, NameComponent)}`
+            //   )
             if (state && !state.consumed) {
               return state
             }
@@ -253,7 +259,9 @@ export const InputComponent = defineComponent({
             }
           }
         )
-      }, {})
+      },
+      {},
+      { serialized: false }
     )
   }),
 

@@ -77,6 +77,7 @@ describe('EditorControlFunctions', () => {
   beforeEach(async () => {
     createEngine()
     getMutableState(EngineState).isEditing.set(true)
+    getMutableState(EngineState).isEditor.set(true)
     getMutableState(EngineState).userID.set('user' as UserID)
     mockSpatialEngine()
     await Physics.load()
