@@ -96,7 +96,7 @@ import WebWorker from 'web-worker'
 import { FileLoader } from '../base/FileLoader';
 import { Loader } from '../base/Loader';
 import { isClient } from '@ir-engine/hyperflux'
-import { RefetchableCompressedCubeTexture, RefetchableCompressedArrayTexture, RefetchableCompressedTexture } from '../texture/RefetchableTexture';
+import { CompressedTexture, CompressedArrayTexture } from 'three';
 
 const _taskCache = new WeakMap();
 
@@ -298,17 +298,17 @@ class KTX2Loader extends Loader {
 
 		if ( container.faceCount === 6 ) {
 
-			texture = new RefetchableCompressedCubeTexture( faces, format, UnsignedByteType );
-			texture.loader = this;
+			texture = new CompressedTexture( faces, width, height, format, UnsignedByteType );
+			texture.userData = { url };
 
 		} else {
 
 			const mipmaps = faces[ 0 ].mipmaps;
 
 			texture = container.layerCount > 1
-				? new RefetchableCompressedArrayTexture( mipmaps, width, height, container.layerCount, format, UnsignedByteType )
-				: new RefetchableCompressedTexture( mipmaps, width, height, format, UnsignedByteType );
-			texture.loader = this;
+				? new CompressedArrayTexture( mipmaps, width, height, container.layerCount, format, UnsignedByteType )
+				: new CompressedTexture( mipmaps, width, height, format, UnsignedByteType );
+			texture.userData = { url };
 
 		}
 
