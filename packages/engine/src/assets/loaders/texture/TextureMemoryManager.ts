@@ -201,7 +201,7 @@ async function loadFromURL(texture: Texture): Promise<boolean> {
   if (!url) return false
 
   try {
-    // Create a new TextureLoader
+    // Create a new TextureLoader instance
     const loader = new TextureLoader()
 
     return new Promise<boolean>((resolve) => {
@@ -238,42 +238,6 @@ export function textureNeedsRestoration(texture: Texture): boolean {
   return (
     !texture.source.data || (typeof texture.source.data === 'object' && Object.keys(texture.source.data).length === 0)
   )
-}
-
-/**
- * Clear texture data for a specific URL from the ResourceCache
- * @param url The URL of the texture to clear
- */
-export async function clearTextureDataForUrl(url: string): Promise<void> {
-  if (!ResourceCache || !url) return
-
-  try {
-    // Delete the specific texture data entry
-    await ResourceCache.deleteResource(`${TEXTURE_CACHE_PREFIX}${url}`)
-  } catch (error) {
-    console.error(`Error clearing texture data for URL ${url}: ${error}`)
-  }
-}
-
-/**
- * Clear all texture data from the ResourceCache
- */
-export async function clearTextureDataCache(): Promise<void> {
-  if (!ResourceCache) return
-
-  try {
-    // Get all keys from ResourceCache
-    const resources = await ResourceCache.resources.toArray()
-
-    // Delete all texture data entries
-    for (const resource of resources) {
-      if (resource.key.startsWith(TEXTURE_CACHE_PREFIX)) {
-        await ResourceCache.deleteResource(resource.key)
-      }
-    }
-  } catch (error) {
-    console.error(`Error clearing texture data cache: ${error}`)
-  }
 }
 
 /**

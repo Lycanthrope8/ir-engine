@@ -31,9 +31,16 @@ import { Entity } from '@ir-engine/ecs'
 import { overrideOnBeforeCompile } from './common/functions/OnBeforeCompilePlugin'
 import { Object3DUtils } from './transform/Object3DUtils'
 
-// Initialize texture memory management system
-import { initTextureMemorySystem } from '@ir-engine/engine/src/assets/loaders/texture/TextureMemorySystem'
-initTextureMemorySystem()
+// Apply texture memory management patch
+import { applyTexturePatch } from '@ir-engine/engine/src/assets/loaders/texture/TexturePatch'
+
+try {
+  // Apply the texture patch directly - simpler and more direct
+  applyTexturePatch()
+  console.log('Texture memory management patch applied')
+} catch (e) {
+  console.error('Error applying texture memory patch:', e)
+}
 
 //@ts-ignore
 Vector3.prototype.toJSON = function () {

@@ -24,13 +24,18 @@ Infinite Reality Engine. All Rights Reserved.
 */
 
 import { PMREMGenerator, Texture } from 'three'
-import { restoreTextureData, textureNeedsRestoration } from './TextureMemoryManager'
+import { getTextureCacheSize, restoreTextureData, textureNeedsRestoration } from './TextureMemoryManager'
 
 /**
  * Apply patches to Three.js Texture classes to handle texture memory management
  * This adds the necessary functionality without requiring custom subclasses
  */
 export function applyTexturePatch() {
+  // Log the current cache size
+  getTextureCacheSize().then((size) => {
+    console.log(`Texture cache contains ${size} entries`)
+  })
+
   // Store the original needsUpdate setter
   const originalNeedsUpdateSetter = Object.getOwnPropertyDescriptor(Texture.prototype, 'needsUpdate')?.set
 
@@ -70,19 +75,8 @@ export function applyTexturePatch() {
     // Call the original dispose method
     originalDispose.call(this)
 
-    // If the texture has a URL, try to remove it from the cache
-    if (this.userData?.url) {
-      // We don't need to await this, it can happen asynchronously
-      import('./TextureMemoryManager')
-        .then(({ clearTextureDataForUrl }) => {
-          if (clearTextureDataForUrl) {
-            clearTextureDataForUrl(this.userData.url)
-          }
-        })
-        .catch((error) => {
-          console.error('Error clearing texture data:', error)
-        })
-    }
+    // We intentionally don't clear texture data from the cache when disposing
+    // This allows the texture to be loaded from the cache on subsequent page loads
   }
 
   // Override PMREMGenerator's _fromTexture method to ensure textures are updated
