@@ -24,13 +24,18 @@ Infinite Reality Engine. All Rights Reserved.
 */
 
 import { Effect, EffectComposer, EffectPass, NormalPass, OutlineEffect, Pass, RenderPass } from 'postprocessing'
-import { Scene, WebGLRenderer } from 'three'
+import { ArrayCamera, Scene, SRGBColorSpace, Texture, WebGLRenderer, WebGLRendererParameters } from 'three'
 
-import { Entity, defineComponent, getComponent } from '@ir-engine/ecs'
+import { defineComponent, Entity, getComponent, hasComponent, useComponent, useEntityContext } from '@ir-engine/ecs'
 import { S } from '@ir-engine/ecs/src/schemas/JSONSchemas'
-import { none } from '@ir-engine/hyperflux'
+import { getState, NO_PROXY, none, State, useMutableState } from '@ir-engine/hyperflux'
+import { useEffect } from 'react'
 
-import { WebXRManager } from '../../xr/WebXRManager'
+import { CameraComponent } from '../../camera/components/CameraComponent'
+import { ResourceState, ResourceType } from '../../resources/ResourceState'
+import { createWebXRManager, WebXRManager } from '../../xr/WebXRManager'
+import { HighlightState } from '../HighlightState'
+import { RendererState } from '../RendererState'
 import { ObjectLayers } from '../constants/ObjectLayers'
 import { CSM } from '../csm/CSM'
 import CSMHelper from '../csm/CSMHelper'
@@ -155,6 +160,201 @@ export const RendererComponent = defineComponent({
       rendererComponent.passesFakeMap[key] = none
       delete rendererComponent.passesFakeMap[key]
     }
+  },
+
+  reactor: () => {
+    const entity = useEntityContext()
+    const rendererComponent = useComponent(entity, RendererComponent)
+    const camera = useComponent(entity, CameraComponent).value as ArrayCamera
+    const hightlightState = useMutableState(HighlightState)
+    const renderSettings = useMutableState(RendererState)
+    const effectComposerState = rendererComponent.effectComposer as State<EffectComposer>
+
+    useEffect(() => {
+      const canvas = rendererComponent.canvas.value as HTMLCanvasElement
+
+      const handleWebGLContextLost = (e) => {
+        console.log('Browser lost the context.', e, rendererComponent.webGLLostContext.value)
+        e.preventDefault()
+        // const renderer = getComponent(entity, RendererComponent)
+        // if (renderer.renderer) renderer.renderer.dispose()
+        // if (renderer.effectComposer) renderer.effectComposer.dispose()
+        rendererComponent.needsResize.set(false)
+        // rendererComponent.renderContext.set(null)
+        // rendererComponent.renderer.set(null)
+
+        setTimeout(() => {
+          rendererComponent.webGLLostContext.get(NO_PROXY)!.restoreContext()
+        }, 1)
+      }
+
+      /** @todo this seems unnecessary, since threejs recovers internally */
+      const handleWebGLContextRestore = (e) => {
+        // const canvas = rendererComponent.canvas.value as HTMLCanvasElement
+        // const context = canvas.getContext('webgl2')
+        // rendererComponent.renderContext.set(context)
+        rendererComponent.needsResize.set(true)
+        console.log("Browser's context is restored.", e)
+
+        const textures = ResourceState.getAllResourcesOfType(ResourceType.Texture).map(
+          (resource) => resource.asset
+        ) as Texture[]
+        for (const texture of textures) {
+          texture.needsUpdate = true
+        }
+      }
+
+      canvas.addEventListener('webglcontextlost', handleWebGLContextLost)
+      canvas.addEventListener('webglcontextrestored', handleWebGLContextRestore)
+
+      const context = canvas.getContext('webgl2')
+      if (context) {
+        /**
+         * This can be tested with document.getElementById('engine-renderer-canvas').getContext('webgl2').getExtension('WEBGL_lose_context').loseContext();
+         */
+        rendererComponent.webGLLostContext.set(context.getExtension('WEBGL_lose_context'))
+
+        if (!rendererComponent.webGLLostContext.value) {
+          console.warn('Browser does not support `WEBGL_lose_context` extension')
+        }
+      }
+
+      rendererComponent.renderContext.set(context)
+
+      return () => {
+        canvas.removeEventListener('webglcontextlost', handleWebGLContextLost)
+        canvas.removeEventListener('webglcontextrestored', handleWebGLContextRestore)
+      }
+    }, [])
+
+    useEffect(() => {
+      const context = rendererComponent.renderContext.get(NO_PROXY) as WebGLRenderingContext | WebGL2RenderingContext
+      if (!context) return
+
+      const canvas = rendererComponent.canvas.get(NO_PROXY) as HTMLCanvasElement
+
+      const options: WebGLRendererParameters = {
+        precision: 'highp',
+        powerPreference: 'high-performance',
+        stencil: false,
+        antialias: false,
+        depth: true,
+        logarithmicDepthBuffer: false,
+        canvas,
+        context,
+        preserveDrawingBuffer: false,
+        //@ts-ignore
+        multiviewStereo: true
+      }
+
+      const renderer = new WebGLRenderer(options)
+      rendererComponent.renderer.set(renderer)
+      renderer.outputColorSpace = SRGBColorSpace
+
+      const composer = new EffectComposer(renderer)
+      rendererComponent.effectComposer.set(composer)
+      const renderPass = new RenderPass()
+      composer.addPass(renderPass)
+      rendererComponent.renderPass.set(renderPass)
+
+      // DISABLE THIS IF YOU ARE SEEING SHADER MISBEHAVING - UNCHECK THIS WHEN TESTING UPDATING THREEJS
+      renderer.debug.checkShaderErrors = false
+
+      const xrManager = createWebXRManager(renderer)
+      renderer.xr = xrManager as any
+      rendererComponent.merge({ xrManager })
+      xrManager.cameraAutoUpdate = false
+      xrManager.enabled = true
+
+      const onResize = () => {
+        rendererComponent.needsResize.set(true)
+      }
+
+      // https://stackoverflow.com/questions/48124372/pointermove-event-not-working-with-touch-why-not
+      canvas.style.touchAction = 'none'
+      canvas.addEventListener('resize', onResize, false)
+      window.addEventListener('resize', onResize, false)
+
+      renderer.autoClear = true
+
+      return () => {
+        canvas.removeEventListener('resize', onResize, false)
+        window.removeEventListener('resize', onResize, false)
+
+        renderer.dispose()
+        composer.dispose()
+      }
+    }, [rendererComponent.renderContext.value])
+
+    useEffect(() => {
+      if (!rendererComponent.effectComposer.value) return
+
+      const scene = rendererComponent.scene.value as Scene
+      const outlineEffect = new OutlineEffect(scene, camera, getState(HighlightState))
+      outlineEffect.selectionLayer = ObjectLayers.HighlightEffect
+      rendererComponent.effectInstances.OutlineEffect.set(outlineEffect)
+
+      return () => {
+        if (!hasComponent(entity, RendererComponent)) return
+        outlineEffect.dispose()
+        rendererComponent.effectInstances.OutlineEffect.set(none)
+      }
+    }, [!!rendererComponent.effectComposer.value, hightlightState])
+
+    useEffect(() => {
+      const effectComposer = effectComposerState.get(NO_PROXY)
+      if (!effectComposer) return
+
+      const effectsVal = rendererComponent.effects.get(NO_PROXY) as Record<string, Effect>
+
+      const enabled = renderSettings.usePostProcessing.get(NO_PROXY) as boolean
+
+      const effectArray = enabled ? Object.values(effectsVal) : []
+      if (rendererComponent.effectInstances.OutlineEffect.get(NO_PROXY))
+        effectArray.unshift(rendererComponent.effectInstances.OutlineEffect.get(NO_PROXY) as OutlineEffect)
+
+      const effectPass = new EffectPass(camera, ...effectArray)
+      effectComposerState.EffectPass.set(effectPass)
+
+      if (enabled) {
+        effectComposerState.merge(effectsVal)
+      }
+
+      try {
+        if (rendererComponent.passesFakeMap.value) {
+          for (const pass of Object.values(rendererComponent.passesFakeMap.value as Record<string, PassCount>)) {
+            effectComposer.addPass(pass.pass)
+          }
+        }
+        effectComposer.addPass(effectPass)
+      } catch (e) {
+        console.warn(e) /** @todo Implement user messaging Ex: (Can not use multiple convolution effects) */
+      }
+
+      return () => {
+        if (!hasComponent(entity, RendererComponent)) return
+        if (enabled) {
+          for (const effect in effectsVal) {
+            effectsVal[effect].dispose()
+            effectComposerState[effect].set(none)
+          }
+        }
+        effectComposer.EffectPass.dispose()
+        effectComposer.removePass(effectPass)
+        if (rendererComponent.passesFakeMap.value) {
+          for (const pass of Object.values(rendererComponent.passesFakeMap.value as Record<string, PassCount>)) {
+            effectComposer.removePass(pass.pass)
+          }
+        }
+      }
+    }, [
+      rendererComponent.effects,
+      // rendererComponent.effectComposer.value,
+      rendererComponent?.effectInstances?.OutlineEffect.value,
+      renderSettings.usePostProcessing.value
+    ])
+
+    return null
   }
 })
 

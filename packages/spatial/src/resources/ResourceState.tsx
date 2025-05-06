@@ -56,8 +56,8 @@ import { Geometry } from '../common/constants/Geometry'
 import iterateObject3D from '../common/functions/iterateObject3D'
 import { ColliderComponent } from '../physics/components/ColliderComponent'
 import { PerformanceState } from '../renderer/PerformanceState'
-import { RendererComponent } from '../renderer/WebGLRendererSystem'
 import { ObjectComponent } from '../renderer/components/ObjectComponent'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 
 declare module 'three/src/textures/Texture.js' {
   export interface Texture {

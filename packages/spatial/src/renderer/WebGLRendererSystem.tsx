@@ -42,7 +42,6 @@ import {
 import { getMutableState, getState, useMutableState } from '@ir-engine/hyperflux'
 
 import { getNestedChildren } from '@ir-engine/ecs'
-import { Pass } from 'postprocessing'
 import { CameraComponent } from '../camera/components/CameraComponent'
 import { XRState } from '../xr/XRState'
 import { ObjectComponent } from './components/ObjectComponent'
@@ -55,12 +54,6 @@ import { RenderModes } from './constants/RenderModes'
 import { changeRenderMode } from './functions/changeRenderMode'
 import { PerformanceManager, PerformanceState } from './PerformanceState'
 import { RendererState } from './RendererState'
-
-type PassCount = {
-  pass: Pass
-  count: number
-}
-
 /**
  * Executes the system. Called each frame by default from the Engine.instance.
  * @param delta Time since last frame.

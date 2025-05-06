@@ -32,11 +32,8 @@ import { defineQuery } from '@ir-engine/ecs/src/QueryFunctions'
 import { ScenePreviewCameraComponent } from '@ir-engine/engine/src/scene/components/ScenePreviewCamera'
 import { getState } from '@ir-engine/hyperflux'
 import { CameraComponent } from '@ir-engine/spatial/src/camera/components/CameraComponent'
-import {
-  getNestedVisibleChildren,
-  getSceneParameters,
-  RendererComponent
-} from '@ir-engine/spatial/src/renderer/WebGLRendererSystem'
+import { getNestedVisibleChildren, getSceneParameters } from '@ir-engine/spatial/src/renderer/WebGLRendererSystem'
+import { RendererComponent } from '@ir-engine/spatial/src/renderer/components/RendererComponent'
 import { KTX2Encoder } from '@ir-engine/xrui/core/textures/KTX2Encoder'
 
 import { SourceComponent } from '@ir-engine/engine/src/scene/components/SourceComponent'
