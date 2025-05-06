@@ -30,8 +30,8 @@ import { ECSState, Timer, setComponent } from '@ir-engine/ecs'
 import { getMutableState, getState } from '@ir-engine/hyperflux'
 import { Matrix4 } from 'three'
 import { ReferenceSpaceState } from '../../src/ReferenceSpaceState'
-import { RendererComponent } from '../../src/renderer/WebGLRendererSystem'
 import { ReferenceSpace, XRState } from '../../src/xr/XRState'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 import { MockXRFrame, MockXRReferenceSpace, MockXRSpace } from './MockXR'
 
 export const mockSpatialEngine = () => {

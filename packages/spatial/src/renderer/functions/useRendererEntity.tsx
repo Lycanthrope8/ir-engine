@@ -33,7 +33,7 @@ import {
 } from '@ir-engine/ecs'
 import { startReactor, useHookstate, useImmediateEffect } from '@ir-engine/hyperflux'
 import React, { useLayoutEffect } from 'react'
-import { RendererComponent } from '../WebGLRendererSystem'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 
 /**
  * Returns the renderer entity that is rendering the specified entity

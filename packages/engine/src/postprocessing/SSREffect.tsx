@@ -27,11 +27,11 @@ import { Entity, getComponent, useComponent } from '@ir-engine/ecs'
 import { getMutableState, getState, none } from '@ir-engine/hyperflux'
 import { CameraComponent } from '@ir-engine/spatial/src/camera/components/CameraComponent'
 import { EffectReactorProps, PostProcessingEffectState } from '@ir-engine/spatial/src/renderer/effects/EffectRegistry'
-import { RendererComponent } from '@ir-engine/spatial/src/renderer/WebGLRendererSystem'
 import { EffectComposer } from 'postprocessing'
 import React, { useEffect } from 'react'
 import { SSREffect, VelocityDepthNormalPass } from 'realism-effects'
 import { ArrayCamera, Scene } from 'three'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 import { PropertyTypes } from './PostProcessingRegister'
 
 declare module 'postprocessing' {

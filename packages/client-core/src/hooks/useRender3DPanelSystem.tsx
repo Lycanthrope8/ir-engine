@@ -44,9 +44,9 @@ import { CameraComponent } from '@ir-engine/spatial/src/camera/components/Camera
 import { CameraOrbitComponent } from '@ir-engine/spatial/src/camera/components/CameraOrbitComponent'
 import { NameComponent } from '@ir-engine/spatial/src/common/NameComponent'
 import { InputComponent } from '@ir-engine/spatial/src/input/components/InputComponent'
-import { RendererComponent } from '@ir-engine/spatial/src/renderer/WebGLRendererSystem'
 import { SceneComponent } from '@ir-engine/spatial/src/renderer/components/SceneComponents'
 import { VisibleComponent } from '@ir-engine/spatial/src/renderer/components/VisibleComponent'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 
 export function useRender3DPanelSystem(canvas: React.MutableRefObject<HTMLCanvasElement>) {
   const canvasRef = useHookstate(canvas.current)

@@ -40,8 +40,8 @@ import { Physics } from '@ir-engine/spatial/src/physics/classes/Physics'
 import { ColliderComponent } from '@ir-engine/spatial/src/physics/components/ColliderComponent'
 import { RigidBodyComponent } from '@ir-engine/spatial/src/physics/components/RigidBodyComponent'
 import { MeshComponent } from '@ir-engine/spatial/src/renderer/components/MeshComponent'
-import { computeTransformMatrix } from '@ir-engine/spatial/src/transform/systems/TransformSystem'
 import { useEffect, useLayoutEffect } from 'react'
+import { computeTransformMatrix } from '../transform/components/TransformComponent'
 import { GLTFComponent } from './GLTFComponent'
 
 function forceUpdateMatrices(childEntity: Entity, ancestorEntity: Entity = UndefinedEntity) {

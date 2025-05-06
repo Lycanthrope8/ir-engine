@@ -42,8 +42,8 @@ import { defineComponent, getComponent, useComponent } from '@ir-engine/ecs/src/
 import { Engine } from '@ir-engine/ecs/src/Engine'
 import { CameraComponent } from '@ir-engine/spatial/src/camera/components/CameraComponent'
 import { createSDFShader } from '@ir-engine/spatial/src/renderer/effects/sdf/SDFShader'
-import { RendererComponent } from '@ir-engine/spatial/src/renderer/WebGLRendererSystem'
 import { TransformComponent } from '@ir-engine/spatial/src/transform/components/TransformComponent'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 
 import { S } from '@ir-engine/ecs/src/schemas/JSONSchemas'
 import { getState } from '@ir-engine/hyperflux'

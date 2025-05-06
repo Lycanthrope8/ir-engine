@@ -44,7 +44,6 @@ import { useHelperEntity } from '@ir-engine/spatial/src/common/debug/useHelperEn
 import { InputComponent } from '@ir-engine/spatial/src/input/components/InputComponent'
 import { useRendererEntity } from '@ir-engine/spatial/src/renderer/functions/useRendererEntity'
 import { RendererState } from '@ir-engine/spatial/src/renderer/RendererState'
-import { RendererComponent } from '@ir-engine/spatial/src/renderer/WebGLRendererSystem'
 import { T } from '@ir-engine/spatial/src/schema/schemaFunctions'
 import { BoundingBoxComponent } from '@ir-engine/spatial/src/transform/components/BoundingBoxComponents'
 import type Hls from 'hls.js'
@@ -58,6 +57,7 @@ import { NodeIDSchema } from '../../gltf/NodeIDComponent'
 import { PlayMode } from '../constants/PlayMode'
 import { addError, clearErrors, removeError } from '../functions/ErrorFunctions'
 import isHLS from '../functions/isHLS'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 
 const AUDIO_TEXTURE_PATH = '/static/editor/audio-icon.png'
 

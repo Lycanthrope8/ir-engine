@@ -32,9 +32,9 @@ import { ReferenceSpaceState } from '../../ReferenceSpaceState'
 import { BoundingBoxComponent, updateBoundingBox } from '../../transform/components/BoundingBoxComponents'
 import { TransformComponent } from '../../transform/components/TransformComponent'
 import { getBoundingBoxVertices } from '../../transform/functions/BoundingBoxFunctions'
-import { computeTransformMatrix } from '../../transform/systems/TransformSystem'
 import { CameraComponent } from '../components/CameraComponent'
 import { TargetCameraRotationComponent } from '../components/TargetCameraRotationComponent'
+import { computeTransformMatrix } from '../transform/components/TransformComponent'
 
 export const setTargetCameraRotation = (entity: Entity, phi: number, theta: number, time = 0.3) => {
   const cameraRotationTransition = getOptionalComponent(entity, TargetCameraRotationComponent) as

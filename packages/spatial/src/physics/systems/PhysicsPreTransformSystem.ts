@@ -32,10 +32,10 @@ import { getState } from '@ir-engine/hyperflux'
 import { EntityTreeComponent, getAncestorWithComponents } from '@ir-engine/ecs'
 import { Vector3_One, Vector3_Zero } from '../../common/constants/MathConstants'
 import { setChildrenDirtyFast, TransformComponent } from '../../transform/components/TransformComponent'
-import { computeTransformMatrix, isDirty, TransformDirtyUpdateSystem } from '../../transform/systems/TransformSystem'
 import { Physics, PhysicsWorld } from '../classes/Physics'
 import { ColliderComponent } from '../components/ColliderComponent'
 import { RigidBodyComponent } from '../components/RigidBodyComponent'
+import { computeTransformMatrix, isDirty, TransformDirtyUpdateSystem } from '../transform/components/TransformComponent'
 
 const _localMatrix = new Matrix4()
 const _sceneRelParentMatrix = new Matrix4()

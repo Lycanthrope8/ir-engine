@@ -30,7 +30,7 @@ import { getComponent, hasComponent, setComponent } from '@ir-engine/ecs/src/Com
 import { Entity } from '@ir-engine/ecs/src/Entity'
 import { getState } from '@ir-engine/hyperflux'
 import { TransformComponent } from '@ir-engine/spatial/src/transform/components/TransformComponent'
-import { computeTransformMatrix } from '@ir-engine/spatial/src/transform/systems/TransformSystem'
+import { computeTransformMatrix } from '../transform/components/TransformComponent'
 
 import { AnimationState } from '../AnimationManager'
 import { AnimationComponent } from '../components/AnimationComponent'

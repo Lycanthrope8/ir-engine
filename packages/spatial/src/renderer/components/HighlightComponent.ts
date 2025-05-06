@@ -27,7 +27,7 @@ import { defineQuery, defineSystem, Engine, Entity } from '@ir-engine/ecs'
 import { defineComponent, getComponent, hasComponent } from '@ir-engine/ecs/src/ComponentFunctions'
 
 import { OutlineEffect } from 'postprocessing'
-import { RendererComponent, WebGLRendererSystem } from '../WebGLRendererSystem'
+import { RendererComponent, WebGLRendererSystem } from '../renderer/components/RendererComponent'
 import { MeshComponent } from './MeshComponent'
 import { VisibleComponent } from './VisibleComponent'
 

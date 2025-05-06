@@ -63,7 +63,6 @@ import {
 } from '@ir-engine/spatial/src/renderer/materials/MaterialComponent'
 import { setupMaterialParameters } from '@ir-engine/spatial/src/renderer/materials/materialFunctions'
 import { ResourceType } from '@ir-engine/spatial/src/resources/ResourceState'
-import { computeTransformMatrix } from '@ir-engine/spatial/src/transform/systems/TransformSystem'
 import {
   AnimationClip,
   AnimationMixer,
@@ -122,6 +121,7 @@ import {
   SceneDeltaRegistry,
   SceneDeltaState
 } from '../scene/systems/SceneDeltaState'
+import { computeTransformMatrix } from '../transform/components/TransformComponent'
 import { GLTFComponent } from './GLTFComponent'
 import {
   ALPHA_MODES,

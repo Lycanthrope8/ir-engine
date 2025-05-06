@@ -50,13 +50,13 @@ import { destroySpatialEngine, destroySpatialViewer } from '../../initializeEngi
 import { MeshComponent } from '../../renderer/components/MeshComponent'
 import { ObjectComponent } from '../../renderer/components/ObjectComponent'
 import { VisibleComponent } from '../../renderer/components/VisibleComponent'
-import { RendererComponent } from '../../renderer/WebGLRendererSystem'
 import { BoundingBoxComponent } from '../../transform/components/BoundingBoxComponents'
 import { TransformComponent } from '../../transform/components/TransformComponent'
-import { computeTransformMatrix } from '../../transform/systems/TransformSystem'
 import { XRState } from '../../xr/XRState'
 import { InputComponent } from '../components/InputComponent'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 import { InputState } from '../state/InputState'
+import { computeTransformMatrix } from '../transform/components/TransformComponent'
 
 describe('ClientInputHeuristics', () => {
   describe('findRaycastedInput', () => {

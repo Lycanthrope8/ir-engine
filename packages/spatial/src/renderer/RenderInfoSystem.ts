@@ -29,8 +29,8 @@ import { defineSystem } from '@ir-engine/ecs/src/SystemFunctions'
 import { defineState, getMutableState, getState, useHookstate } from '@ir-engine/hyperflux'
 
 import { useEffect } from 'react'
+import { RendererComponent, WebGLRendererSystem } from '../renderer/components/RendererComponent'
 import { ResourceState, ResourceType } from '../resources/ResourceState'
-import { RendererComponent, WebGLRendererSystem } from './WebGLRendererSystem'
 
 export const RenderInfoState = defineState({
   name: 'RenderInfoState',

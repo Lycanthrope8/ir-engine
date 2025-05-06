@@ -29,7 +29,7 @@ import { Box3, Vector3 } from 'three'
 import { ObjectComponent } from '../../renderer/components/ObjectComponent'
 import { BoundingBoxComponent } from '../components/BoundingBoxComponents'
 import { TransformComponent } from '../components/TransformComponent'
-import { computeTransformMatrixWithChildren } from '../systems/TransformSystem'
+import { computeTransformMatrixWithChildren } from '../transform/components/TransformComponent'
 
 /**
  * Returns all vertices of the bounding box, useful for including all vertices in the camera's view rather than hoping min and max are aligned with the camera

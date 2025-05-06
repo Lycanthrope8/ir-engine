@@ -37,10 +37,10 @@ import { SceneThumbnailState } from '@ir-engine/editor/src/services/SceneThumbna
 import { ScenePreviewCameraComponent } from '@ir-engine/engine/src/scene/components/ScenePreviewCamera'
 import { getState, useMutableState } from '@ir-engine/hyperflux'
 import { ReferenceSpaceState } from '@ir-engine/spatial'
-import { computeTransformMatrix } from '@ir-engine/spatial/src/transform/systems/TransformSystem'
 import { ImageLink } from '@ir-engine/ui/editor'
 import { Euler } from 'three'
 import Button from '../../../../../primitives/tailwind/Button'
+import { computeTransformMatrix } from '../transform/components/TransformComponent'
 
 /**
  * ScenePreviewCameraNodeEditor provides the editor view to customize properties.

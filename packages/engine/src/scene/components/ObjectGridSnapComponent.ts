@@ -47,10 +47,10 @@ import { MeshComponent } from '@ir-engine/spatial/src/renderer/components/MeshCo
 import { ObjectLayerMask, ObjectLayerMasks } from '@ir-engine/spatial/src/renderer/constants/ObjectLayers'
 import { T } from '@ir-engine/spatial/src/schema/schemaFunctions'
 import { TransformComponent } from '@ir-engine/spatial/src/transform/components/TransformComponent'
-import { computeTransformMatrix } from '@ir-engine/spatial/src/transform/systems/TransformSystem'
 import { useEffect } from 'react'
 import { Box3, BufferGeometry, LineBasicMaterial, Matrix4, Mesh, Quaternion, Vector3 } from 'three'
 import { GLTFComponent } from '../../gltf/GLTFComponent'
+import { computeTransformMatrix } from '../transform/components/TransformComponent'
 
 function createBBoxGridGeometry(matrixWorld: Matrix4, bbox: Box3, density: number): BufferGeometry {
   const lineSegmentList: Vector3[] = []

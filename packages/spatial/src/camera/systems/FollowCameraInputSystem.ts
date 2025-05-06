@@ -47,8 +47,8 @@ import { XRState } from '@ir-engine/spatial/src/xr/XRState'
 import { useEffect } from 'react'
 import { ReferenceSpaceState } from '../../ReferenceSpaceState'
 import { Q_Y_180 } from '../../common/constants/MathConstants'
-import { RendererComponent } from '../../renderer/WebGLRendererSystem'
 import { TransformComponent } from '../../transform/components/TransformComponent'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 
 // const throttleHandleCameraZoom = throttle(handleFollowCameraZoom, 30, { leading: true, trailing: false })
 

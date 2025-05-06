@@ -41,12 +41,12 @@ import { MeshComponent } from '@ir-engine/spatial/src/renderer/components/MeshCo
 import { ObjectLayerMaskComponent } from '@ir-engine/spatial/src/renderer/components/ObjectLayerComponent'
 import { VisibleComponent } from '@ir-engine/spatial/src/renderer/components/VisibleComponent'
 import { ObjectLayers } from '@ir-engine/spatial/src/renderer/constants/ObjectLayers'
-import { RendererComponent } from '@ir-engine/spatial/src/renderer/WebGLRendererSystem'
 import { TransformGizmoTagComponent } from '@ir-engine/spatial/src/transform/components/TransformComponent'
 import { BoxGeometry, Mesh, MeshBasicMaterial, Vector3 } from 'three'
 import { afterEach, assert, beforeEach, describe, it, vi } from 'vitest'
 import { assertFloat } from '../../../spatial/tests/util/assert'
 import { mockSpatialEngine } from '../../../spatial/tests/util/mockSpatialEngine'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 import { editorInputHeuristic } from './TransformGizmoSystem'
 
 const meshBVHReactor = SystemDefinitions.get(MeshBVHSystem)!.reactor!

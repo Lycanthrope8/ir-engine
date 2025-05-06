@@ -33,8 +33,8 @@ import { S } from '@ir-engine/ecs/src/schemas/JSONSchemas'
 import { getState } from '@ir-engine/hyperflux'
 import { ReferenceSpaceState } from '../../ReferenceSpaceState'
 import { CameraComponent } from '../../camera/components/CameraComponent'
-import { RendererComponent } from '../../renderer/WebGLRendererSystem'
 import { TransformComponent } from '../../transform/components/TransformComponent'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 
 const _size = new Vector2()
 const _vec = new Vector3()

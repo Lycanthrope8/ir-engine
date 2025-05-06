@@ -27,7 +27,6 @@ import { Engine, getChildrenWithComponents, getComponent } from '@ir-engine/ecs'
 import { ImmutableArray, State, getState } from '@ir-engine/hyperflux'
 import { isMobile } from '@ir-engine/spatial/src/common/functions/isMobile'
 import { MeshComponent } from '@ir-engine/spatial/src/renderer/components/MeshComponent'
-import { RendererComponent } from '@ir-engine/spatial/src/renderer/WebGLRendererSystem'
 import { isMobileXRHeadset } from '@ir-engine/spatial/src/xr/XRState'
 import {
   BufferGeometry,
@@ -57,6 +56,7 @@ import {
   TextureType,
   UniformSolveTarget
 } from '../constants/UVOLTypes'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 
 export const getBufferGeometrySize = (geometry: BufferGeometry) => {
   const attributes = geometry.attributes

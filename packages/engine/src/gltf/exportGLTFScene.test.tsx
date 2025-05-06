@@ -71,10 +71,10 @@ import {
   MaterialStateComponent
 } from '@ir-engine/spatial/src/renderer/materials/MaterialComponent'
 import { TransformComponent } from '@ir-engine/spatial/src/transform/components/TransformComponent'
-import { computeTransformMatrix } from '@ir-engine/spatial/src/transform/systems/TransformSystem'
 import { AnimationComponent } from '../avatar/components/AnimationComponent'
 import { SourceComponent, SourceID } from '../scene/components/SourceComponent'
 import { createSceneEntity } from '../scene/functions/createSceneEntity'
+import { computeTransformMatrix } from '../transform/components/TransformComponent'
 import { exportGLTFScene, materialExtensions } from './exportGLTFScene'
 import { EEMaterialComponent } from './MaterialExtensionComponents'
 

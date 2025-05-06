@@ -45,12 +45,12 @@ import { getState, useImmediateEffect, useMutableState } from '@ir-engine/hyperf
 import { useEffect } from 'react'
 import { Vector2 } from 'three'
 import { NameComponent } from '../../common/NameComponent'
-import { RendererComponent } from '../../renderer/WebGLRendererSystem'
 import { TransformComponent } from '../../transform/components/TransformComponent'
 import { XRState } from '../../xr/XRState'
 import { DefaultButtonBindings, InputComponent } from '../components/InputComponent'
 import { InputPointerComponent } from '../components/InputPointerComponent'
 import { InputSourceComponent } from '../components/InputSourceComponent'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 import {
   AnyButton,
   ButtonState,

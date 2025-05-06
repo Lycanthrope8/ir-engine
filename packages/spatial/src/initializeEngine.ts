@@ -31,6 +31,7 @@ import { getMutableState, getState } from '@ir-engine/hyperflux'
 
 import { EntityTreeComponent } from '@ir-engine/ecs'
 import { useEffect } from 'react'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 import { CameraComponent } from './camera/components/CameraComponent'
 import { NameComponent } from './common/NameComponent'
 import { InputComponent } from './input/components/InputComponent'
@@ -40,7 +41,6 @@ import { ObjectLayerMaskComponent } from './renderer/components/ObjectLayerCompo
 import { SceneComponent } from './renderer/components/SceneComponents'
 import { VisibleComponent } from './renderer/components/VisibleComponent'
 import { ObjectLayers } from './renderer/constants/ObjectLayers'
-import { RendererComponent } from './renderer/WebGLRendererSystem'
 import { TransformComponent } from './transform/components/TransformComponent'
 
 export const initializeSpatialViewer = (canvas?: HTMLCanvasElement) => {

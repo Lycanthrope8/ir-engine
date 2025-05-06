@@ -56,14 +56,13 @@ import {
 } from '@ir-engine/spatial'
 import { Vector3_Back } from '@ir-engine/spatial/src/common/constants/MathConstants'
 import { destroySpatialEngine } from '@ir-engine/spatial/src/initializeEngine'
-import { RendererState } from '@ir-engine/spatial/src/renderer/RendererState'
-import { RendererComponent } from '@ir-engine/spatial/src/renderer/WebGLRendererSystem'
 import { MeshComponent } from '@ir-engine/spatial/src/renderer/components/MeshComponent'
 import { ObjectComponent } from '@ir-engine/spatial/src/renderer/components/ObjectComponent'
 import { VisibleComponent } from '@ir-engine/spatial/src/renderer/components/VisibleComponent'
 import { RenderModes } from '@ir-engine/spatial/src/renderer/constants/RenderModes'
 import { CSM } from '@ir-engine/spatial/src/renderer/csm/CSM'
 import { getShadowsEnabled } from '@ir-engine/spatial/src/renderer/functions/RenderSettingsFunction'
+import { RendererState } from '@ir-engine/spatial/src/renderer/RendererState'
 import { XRLightProbeState } from '@ir-engine/spatial/src/xr/XRLightProbeSystem'
 import { mockSpatialEngine } from '@ir-engine/spatial/tests/util/mockSpatialEngine'
 import { act, render } from '@testing-library/react'
@@ -77,6 +76,7 @@ import { DropShadowComponent } from '../components/DropShadowComponent'
 import { RenderSettingsComponent } from '../components/RenderSettingsComponent'
 import { ShadowComponent } from '../components/ShadowComponent'
 import { SourceComponent, SourceID } from '../components/SourceComponent'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 import {
   DropShadowSystem,
   ShadowSystem,

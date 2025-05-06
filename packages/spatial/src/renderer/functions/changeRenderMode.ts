@@ -30,8 +30,8 @@ import { Entity, getComponent } from '@ir-engine/ecs'
 import { getState } from '@ir-engine/hyperflux'
 
 import { RendererState } from '../RendererState'
-import { RendererComponent } from '../WebGLRendererSystem'
 import { RenderModes } from '../constants/RenderModes'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 
 /**
  * Change render mode of the renderer

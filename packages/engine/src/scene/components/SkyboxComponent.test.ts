@@ -25,7 +25,6 @@ Infinite Reality Engine. All Rights Reserved.
 import { Engine, getComponent, getOptionalComponent, serializeComponent, setComponent } from '@ir-engine/ecs'
 import { it } from '@ir-engine/engine/src/scene/util/testUtil'
 import { BackgroundComponent } from '@ir-engine/spatial/src/renderer/components/SceneComponents'
-import { RendererComponent } from '@ir-engine/spatial/src/renderer/WebGLRendererSystem'
 import { mockSpatialEngine } from '@ir-engine/spatial/tests/util/mockSpatialEngine'
 import {
   CubeReflectionMapping,
@@ -39,6 +38,7 @@ import {
 import { assert, describe, expect, vi } from 'vitest'
 import { Sky } from '../classes/Sky'
 import { SkyTypeEnum } from '../constants/SkyTypeEnum'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 import { SkyboxComponent } from './SkyboxComponent'
 
 const SkyboxComponentDefaults = {

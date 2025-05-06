@@ -29,7 +29,7 @@ import { Engine, getComponent } from '@ir-engine/ecs'
 import { getState } from '@ir-engine/hyperflux'
 import { SnapMode } from '@ir-engine/spatial/src/common/constants/TransformConstants'
 import { ObjectLayers } from '@ir-engine/spatial/src/renderer/constants/ObjectLayers'
-import { RendererComponent } from '@ir-engine/spatial/src/renderer/WebGLRendererSystem'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 
 import { EditorHelperState } from '../services/EditorHelperState'
 import { getIntersectingNodeOnScreen } from './getIntersectingNode'

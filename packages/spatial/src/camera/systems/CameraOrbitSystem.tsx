@@ -40,8 +40,8 @@ import { Vector3_Up } from '@ir-engine/spatial/src/common/constants/MathConstant
 import { InputComponent } from '../../input/components/InputComponent'
 import { InputPointerComponent } from '../../input/components/InputPointerComponent'
 import { MouseScroll } from '../../input/state/ButtonState'
-import { RendererComponent } from '../../renderer/WebGLRendererSystem'
 import { TransformComponent } from '../../transform/components/TransformComponent'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 
 const ZOOM_SPEED = 0.1
 const PAN_SPEED = 1

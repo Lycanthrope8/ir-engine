@@ -24,8 +24,8 @@ Infinite Reality Engine. All Rights Reserved.
 */
 
 import { defineSystem } from '@ir-engine/ecs/src/SystemFunctions'
-import { computeTransformMatrix } from '@ir-engine/spatial/src/transform/systems/TransformSystem'
 import { XRCameraUpdateSystem } from '@ir-engine/spatial/src/xr/XRCameraSystem'
+import { computeTransformMatrix } from '../transform/components/TransformComponent'
 
 import { AvatarComponent } from '../components/AvatarComponent'
 import { moveAvatar, updateLocalAvatarRotation } from '../functions/moveAvatar'

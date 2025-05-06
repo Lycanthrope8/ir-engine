@@ -43,7 +43,6 @@ import { getState } from '@ir-engine/hyperflux'
 
 import { ObjectDirection, Q_IDENTITY, Vector3_Zero } from '../../common/constants/MathConstants'
 import { TransformComponent } from '../../transform/components/TransformComponent'
-import { computeTransformMatrix } from '../../transform/systems/TransformSystem'
 import { ColliderComponent } from '../components/ColliderComponent'
 import { CollisionComponent } from '../components/CollisionComponent'
 import {
@@ -54,6 +53,7 @@ import {
 import { TriggerComponent } from '../components/TriggerComponent'
 import { AllCollisionMask, CollisionGroups, DefaultCollisionMask } from '../enums/CollisionGroups'
 import { getInteractionGroups } from '../functions/getInteractionGroups'
+import { computeTransformMatrix } from '../transform/components/TransformComponent'
 
 import {
   Entity,

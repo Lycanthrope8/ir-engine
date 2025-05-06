@@ -37,7 +37,6 @@ import { WebLayerManager } from '@ir-engine/xrui/core/three/WebLayerManager'
 import { AssetLoaderState } from '@ir-engine/engine/src/assets/state/AssetLoaderState'
 import { ReferenceSpaceState } from '@ir-engine/spatial'
 import { InputComponent } from '@ir-engine/spatial/src/input/components/InputComponent'
-import { RendererComponent } from '@ir-engine/spatial/src/renderer/WebGLRendererSystem'
 import { ObjectComponent } from '@ir-engine/spatial/src/renderer/components/ObjectComponent'
 import {
   ObjectLayerMaskComponent,
@@ -48,6 +47,7 @@ import { ObjectLayers } from '@ir-engine/spatial/src/renderer/constants/ObjectLa
 import { DistanceFromCameraComponent } from '@ir-engine/spatial/src/transform/components/DistanceComponents'
 import { TransformComponent } from '@ir-engine/spatial/src/transform/components/TransformComponent'
 import { XRUIComponent } from '@ir-engine/spatial/src/xrui/components/XRUIComponent'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 import { XRUIStateContext } from './XRUIStateContext'
 
 export function createXRUI<S extends State<any> | null>(

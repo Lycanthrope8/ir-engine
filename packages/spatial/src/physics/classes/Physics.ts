@@ -62,13 +62,13 @@ import { smootheLerpAlpha } from '../../common/functions/MathLerpFunctions'
 import { MeshComponent } from '../../renderer/components/MeshComponent'
 import { SceneComponent } from '../../renderer/components/SceneComponents'
 import { TransformComponent } from '../../transform/components/TransformComponent'
-import { computeTransformMatrix } from '../../transform/systems/TransformSystem'
 import { ColliderComponent } from '../components/ColliderComponent'
 import { CollisionComponent } from '../components/CollisionComponent'
 import { RigidBodyComponent } from '../components/RigidBodyComponent'
 import { TriggerComponent } from '../components/TriggerComponent'
 import { CollisionGroups } from '../enums/CollisionGroups'
 import { getInteractionGroups } from '../functions/getInteractionGroups'
+import { computeTransformMatrix } from '../transform/components/TransformComponent'
 import {
   Body,
   BodyTypes,

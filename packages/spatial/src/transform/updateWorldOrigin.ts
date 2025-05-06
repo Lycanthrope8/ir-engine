@@ -29,9 +29,9 @@ import { getState } from '@ir-engine/hyperflux'
 import { EntityTreeComponent } from '@ir-engine/ecs'
 import { ReferenceSpaceState } from '../ReferenceSpaceState'
 import { Vector3_One } from '../common/constants/MathConstants'
+import { computeTransformMatrix } from '../transform/components/TransformComponent'
 import { ReferenceSpace, XRState } from '../xr/XRState'
 import { TransformComponent } from './components/TransformComponent'
-import { computeTransformMatrix } from './systems/TransformSystem'
 
 // TODO: only update the world origin in one place; move logic for moving based on viewer hit into the function above
 export const updateWorldOriginFromScenePlacement = () => {

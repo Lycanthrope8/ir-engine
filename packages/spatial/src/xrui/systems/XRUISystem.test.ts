@@ -31,8 +31,8 @@ import { assertFloat } from '../../../tests/util/assert'
 import { mockSpatialEngine } from '../../../tests/util/mockSpatialEngine'
 import { destroySpatialEngine, destroySpatialViewer } from '../../initializeEngine'
 import { IntersectionData } from '../../input/functions/ClientInputHeuristics'
-import { RendererComponent } from '../../renderer/WebGLRendererSystem'
 import { VisibleComponent } from '../../renderer/components/VisibleComponent'
+import { RendererComponent } from '../renderer/components/RendererComponent'
 import { xruiInputHeuristic } from './XRUISystem'
 
 const createViewerEntity = (childEntity: Entity): Entity => {

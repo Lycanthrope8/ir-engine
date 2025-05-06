@@ -35,9 +35,9 @@ import { getMutableState, getState, useHookstate } from '@ir-engine/hyperflux'
 import { EngineState } from '@ir-engine/ecs'
 import { createEngine } from '@ir-engine/ecs/src/Engine'
 import { initializeSpatialEngine } from '../initializeEngine'
+import { RenderSettingsState, RendererComponent } from '../renderer/components/RendererComponent'
 import { PerformanceManager, PerformanceState } from './PerformanceState'
 import { RendererState } from './RendererState'
-import { RenderSettingsState, RendererComponent } from './WebGLRendererSystem'
 
 describe('PerformanceState', () => {
   const mockRenderer = {
