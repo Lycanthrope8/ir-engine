@@ -42,7 +42,7 @@ import { InputSourceComponent } from '../../input/components/InputSourceComponen
 import { getThumbstickOrThumbpadAxes } from '../../input/functions/getThumbstickOrThumbpadAxes'
 import { AxisValueMap } from '../../input/state/ButtonState'
 import { InputState } from '../../input/state/InputState'
-import { RendererComponent } from '../../renderer/WebGLRendererSystem'
+import { RendererComponent } from '../../renderer/components/RendererComponent'
 import { TransformComponent } from '../../transform/components/TransformComponent'
 import { XRState } from '../../xr/XRState'
 import { CameraSettings } from '../CameraState'
