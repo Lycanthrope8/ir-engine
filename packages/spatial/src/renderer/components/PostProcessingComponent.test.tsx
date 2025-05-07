@@ -51,8 +51,8 @@ import { ReferenceSpaceState } from '../../ReferenceSpaceState'
 import { destroySpatialEngine, initializeSpatialEngine } from '../../initializeEngine'
 import { RendererState } from '../RendererState'
 import { EffectReactorProps, PostProcessingEffectState } from '../effects/EffectRegistry'
-import { RendererComponent } from '../renderer/components/RendererComponent'
 import { PostProcessingComponent } from './PostProcessingComponent'
+import { RendererComponent } from './RendererComponent'
 
 const effectKey = 'MockEffect'
 
