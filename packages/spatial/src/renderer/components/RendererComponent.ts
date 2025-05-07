@@ -39,6 +39,15 @@ import { RendererState } from '../RendererState'
 import { ObjectLayers } from '../constants/ObjectLayers'
 import { CSM } from '../csm/CSM'
 import CSMHelper from '../csm/CSMHelper'
+declare module 'postprocessing' {
+  interface EffectComposer {
+    EffectPass: EffectPass
+    OutlineEffect: OutlineEffect
+  }
+  interface Effect {
+    isActive: boolean
+  }
+}
 
 // Define the EffectSchema
 export const EffectSchema = S.Union([S.Any(), S.Type<Effect>(undefined, { isActive: S.Bool() })])

@@ -353,8 +353,14 @@ export const TransformComponent = defineComponent({
     for (const child of getOptionalComponent(entity, EntityTreeComponent)?.children ?? []) {
       TransformComponent.computeTransformMatrixWithChildren(child)
     }
+  },
+
+  getDistanceSquaredFromTarget: (entity: Entity, targetPosition: Vector3) => {
+    return TransformComponent.getWorldPosition(entity, _tempDistSqrVec3).distanceToSquared(targetPosition)
   }
 })
+
+const _tempDistSqrVec3 = new Vector3()
 
 const vec3 = new Vector3()
 const vec3_2 = new Vector3()
