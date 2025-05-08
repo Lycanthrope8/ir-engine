@@ -11,6 +11,7 @@ yarn.lock
 yarn-error.log
 .yarn/
 pnpm-lock.yaml
+bun.lock
 
 #IDEA project
 *.iml

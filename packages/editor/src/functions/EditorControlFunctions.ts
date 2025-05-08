@@ -6,8 +6,8 @@ Version 1.0. (the "License"); you may not use this file except in compliance
 with the License. You may obtain a copy of the License at
 https://github.com/ir-engine/ir-engine/blob/dev/LICENSE.
 The License is based on the Mozilla Public License Version 1.1, but Sections 14
-and 15 have been added to cover use of software over a computer network and 
-provide for limited attribution for the Original Developer. In addition, 
+and 15 have been added to cover use of software over a computer network and
+provide for limited attribution for the Original Developer. In addition,
 Exhibit A has been modified to be consistent with Exhibit B.
 
 Software distributed under the License is distributed on an "AS IS" basis,
@@ -19,7 +19,7 @@ The Original Code is Infinite Reality Engine.
 The Original Developer is the Initial Developer. The Initial Developer of the
 Original Code is the Infinite Reality Engine team.
 
-All portions of the code written by the Infinite Reality Engine team are Copyright © 2021-2023 
+All portions of the code written by the Infinite Reality Engine team are Copyright © 2021-2023
 Infinite Reality Engine. All Rights Reserved.
 */
 
@@ -61,7 +61,6 @@ import { getMutableState, getState, setNestedObject } from '@ir-engine/hyperflux
 import { DirectionalLightComponent, HemisphereLightComponent } from '@ir-engine/spatial'
 import { TransformSpace } from '@ir-engine/spatial/src/common/constants/TransformConstants'
 import { VisibleComponent } from '@ir-engine/spatial/src/renderer/components/VisibleComponent'
-import { TransformComponent } from '@ir-engine/spatial/src/transform/components/TransformComponent'
 
 import { getTextureAsync } from '@ir-engine/engine/src/assets/functions/resourceLoaderHooks'
 import { GLTFComponent } from '@ir-engine/engine/src/gltf/GLTFComponent'
@@ -76,11 +75,11 @@ import {
   MaterialStateComponent
 } from '@ir-engine/spatial/src/renderer/materials/MaterialComponent'
 import { extractDefaults, setupMaterialParameters } from '@ir-engine/spatial/src/renderer/materials/materialFunctions'
+import { TransformComponent } from '@ir-engine/spatial/src/transform/components/TransformComponent'
 import { Color } from 'three'
 import { EditorHelperState } from '../services/EditorHelperState'
 import { EditorState } from '../services/EditorServices'
 import { SelectionState } from '../services/SelectionServices'
-import { computeTransformMatrix } from '../transform/components/TransformComponent'
 import { getIncreamentedName } from './utils'
 
 const tempMatrix4 = new Matrix4()
@@ -419,7 +418,7 @@ const positionObject = (
       SceneDeltaState.registerDelta(entity, TransformComponent, { position: transform.position })
     }
     getMutableComponent(entity, TransformComponent).position.set((v) => v)
-    iterateEntityNode(entity, computeTransformMatrix, (e) => hasComponent(e, TransformComponent))
+    iterateEntityNode(entity, TransformComponent.computeTransformMatrix, (e) => hasComponent(e, TransformComponent))
 
     EditorState.markModifiedScene(entity)
   }
@@ -458,7 +457,7 @@ const rotateObject = (nodes: Entity[], rotations: Quaternion[], space = getState
       SceneDeltaState.registerDelta(entity, TransformComponent, { rotation: transform.rotation })
     }
     getMutableComponent(entity, TransformComponent).rotation.set((v) => v)
-    iterateEntityNode(entity, computeTransformMatrix, (e) => hasComponent(e, TransformComponent))
+    iterateEntityNode(entity, TransformComponent.computeTransformMatrix, (e) => hasComponent(e, TransformComponent))
 
     EditorState.markModifiedScene(entity)
   }
@@ -489,7 +488,7 @@ const rotateAround = (entities: Entity[], axis: Vector3, angle: number, pivot: V
       SceneDeltaState.registerDelta(entity, TransformComponent, { rotation: transform.rotation })
     }
     getMutableComponent(entity, TransformComponent).rotation.set((v) => v)
-    iterateEntityNode(entity, computeTransformMatrix, (e) => hasComponent(e, TransformComponent))
+    iterateEntityNode(entity, TransformComponent.computeTransformMatrix, (e) => hasComponent(e, TransformComponent))
 
     EditorState.markModifiedScene(entity)
   }
@@ -538,7 +537,7 @@ const scaleObject = (entities: Entity[], scales: Vector3[], overrideScale = fals
       SceneDeltaState.registerDelta(entity, TransformComponent, { scale: transformComponent.scale })
     }
     getMutableComponent(entity, TransformComponent).scale.set((v) => v)
-    iterateEntityNode(entity, computeTransformMatrix, (e) => hasComponent(e, TransformComponent))
+    iterateEntityNode(entity, TransformComponent.computeTransformMatrix, (e) => hasComponent(e, TransformComponent))
 
     EditorState.markModifiedScene(entity)
   }

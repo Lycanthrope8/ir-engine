@@ -45,8 +45,8 @@ import {
   useComponent
 } from '@ir-engine/ecs/src/ComponentFunctions'
 import { useHookstate, useImmediateEffect } from '@ir-engine/hyperflux'
+import { RendererComponent } from '@ir-engine/spatial/src/renderer/components/RendererComponent'
 import { BackgroundComponent } from '@ir-engine/spatial/src/renderer/components/SceneComponents'
-import { RendererComponent } from '../renderer/components/RendererComponent'
 
 import { S } from '@ir-engine/ecs/src/schemas/JSONSchemas'
 import { T } from '@ir-engine/spatial/src/schema/schemaFunctions'
