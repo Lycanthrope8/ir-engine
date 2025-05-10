@@ -53,13 +53,12 @@ const ClientSettings = () => {
 const AppPage = (props: { children: React.ReactNode; fallback?: JSX.Element; loginRequired?: boolean }) => {
   const { t } = useTranslation()
   const isLoggedIn = useAuthenticated()
-
+  console.log('isLoggedIn: ', isLoggedIn)
   useThemeProvider()
 
   useSearchParamState()
 
   const loginRequired = typeof props.loginRequired === 'undefined' ? true : props.loginRequired
-
   if (loginRequired && !isLoggedIn) {
     return (
       props.fallback ?? <LoadingView fullScreen className="block h-12 w-12" title={t('common:loader.authenticating')} />
