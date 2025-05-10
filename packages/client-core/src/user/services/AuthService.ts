@@ -307,6 +307,7 @@ export const AuthService = {
           res = await API.instance.reAuthenticate()
         }
         const authUser = resolveAuthUser(res)
+        console.log('Authentcation Type:', authUser.identityProvider.type)
         // authUser is now { accessToken, authentication, identityProvider }
         authState.merge({ authUser })
         await writeAuthUserToIframe()
