@@ -45,6 +45,13 @@ export const asyncLocalStorage = new AsyncLocalStorage<{ user: UserType }>()
  * https://github.com/feathersjs-ecosystem/dataloader/blob/main/docs/guide.md
  */
 export default async (context: HookContext<Application>, next: NextFunction): Promise<HookContext> => {
+  console.log('[AUTH HOOK] Context Snapshot: ', {
+    // path: context.path,
+    // method: context.method,
+    params: context.params,
+    userId: context.params.userId
+    // arguments: context.arguments
+  })
   const store = asyncLocalStorage.getStore()
 
   // If user param is already stored then we don't need to
